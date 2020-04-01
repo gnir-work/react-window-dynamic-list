@@ -1,21 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, forwardRef, useRef } from "react";
 import { VariableSizeList } from "react-window";
 import MeasurableList from "./MeasurableList";
 
-const DynamicList = ({
-  children,
-  data,
-  height,
-  width,
-  ...variableSizeListProps
-}) => {
-  const variableListRef = useRef();
+const DynamicList = (
+  { children, data, height, width, ...variableSizeListProps },
+  ref
+) => {
   const [measuring, setMeasuring] = useState(true);
   const [measurements, setMeasurements] = useState({});
+  const localRef = ref || useRef();
 
   useEffect(() => {
-    if (variableListRef.current) {
-      variableListRef.current.resetAfterIndex(0);
+    if (localRef.current) {
+      localRef.current.resetAfterIndex(0);
     }
   }, [data.length]);
 
@@ -26,13 +23,12 @@ const DynamicList = ({
 
   const itemSize = index => {
     const height = measurements[data[index].id];
-    console.log(height);
     return height;
   };
 
   return !measuring ? (
     <VariableSizeList
-      ref={variableListRef}
+      ref={localRef}
       itemSize={itemSize}
       height={height}
       width={width}
@@ -53,4 +49,4 @@ const DynamicList = ({
   );
 };
 
-export default DynamicList;
+export default forwardRef(DynamicList);

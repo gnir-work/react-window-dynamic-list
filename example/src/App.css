@@ -12,4 +12,5 @@ content .filter-container {
     width: 30em;
     margin: auto;
     margin-bottom: 2em;
+    display: flex;
 }
