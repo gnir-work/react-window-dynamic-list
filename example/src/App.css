@@ -1,0 +1,15 @@
+header {
+  text-align: center;
+}
+
+content .dynamic-list-container {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+content .filter-container {
+    width: 30em;
+    margin: auto;
+    margin-bottom: 2em;
+}
