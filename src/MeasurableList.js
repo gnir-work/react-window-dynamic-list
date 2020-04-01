@@ -1,8 +1,13 @@
 import React from "react";
 import MeasurableCell from "./MeasurableCell";
 
-
-const ListMeasurement = ({ data, onMeasurementFinish, width, height }) => {
+const MeasurableList = ({
+  children,
+  data,
+  onMeasurementFinish,
+  width,
+  height
+}) => {
   const mapping = {};
 
   const handleMeasure = ({ id, height }) => {
@@ -14,17 +19,18 @@ const ListMeasurement = ({ data, onMeasurementFinish, width, height }) => {
 
   return (
     <div style={{ width, height, overflowY: "auto" }}>
-      {data.map(command => (
+      {data.map((command, index) => (
         <MeasurableCell
           key={command.id}
           onMeasure={handleMeasure}
           id={command.id}
-          output={command.output}
-          input={command.input}
-        />
+          index={index}
+        >
+          {children}
+        </MeasurableCell>
       ))}
     </div>
   );
 };
 
-export default ListMeasurement;
+export default MeasurableList;
