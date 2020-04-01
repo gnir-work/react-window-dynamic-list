@@ -33,7 +33,7 @@ This solution is a really naive one, basically we do the following actions:
 #### Restrictions:
 1. It is feasible and possible (you have all of the data at hand) to load the data at the beginning for a brief time.
 2. Your data doesn't change its size
-3. You don't add new items to the list (filtering works :))
+3. You don't add new items to the list (filtering work :smirk:)
 4. Currently this only supports vertical layout. (didn't have time to implement support for horizontal)
  
 #### Requirements:
