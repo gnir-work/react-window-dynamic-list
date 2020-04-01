@@ -11,19 +11,8 @@ npm install --save react-window-dynamic-list
 ```
 
 ## Usage
+![Usage Preview](docs/carbon.png)
 
-```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'react-window-dynamic-list'
-import 'react-window-dynamic-list/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
-```
 
 ## License
 
