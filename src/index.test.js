@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import DynamicList from ".";
 
-describe('ExampleComponent', () => {
-  it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
-  })
-})
+describe("Check export", () => {
+  it("is truthy", () => {
+    expect(DynamicList).toBeTruthy();
+  });
+});
