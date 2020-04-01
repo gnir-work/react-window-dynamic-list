@@ -1,6 +1,6 @@
 {
   "name": "react-window-dynamic-list",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A naive approach for virtualizing a list with dynamically sized items",
   "keywords": [
     "react-window",
