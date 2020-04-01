@@ -1,6 +1,15 @@
-import React from 'react'
-import styles from './styles.module.css'
+import React from "react";
+import MeasurableList from "./MeasurableList";
 
-export const ExampleComponent = ({ text }) => {
-  return <div className={styles.test}>Example Component: {text}</div>
-}
+export const ExampleComponent = ({ data }) => {
+  return (
+    <MeasurableList
+      data={data}
+      width={300}
+      height={600}
+      onMeasurementFinish={console.log}
+    >
+      {({ index }) => <div> {data[index].text} </div>}
+    </MeasurableList>
+  );
+};

@@ -1,7 +1,6 @@
 import React from "react";
 
 import MeasurableCell from "./MeasurableCell";
-import { ListChildComponentProps } from "react-window";
 
 const MeasurableList = ({
   children,
@@ -21,9 +20,11 @@ const MeasurableList = ({
 
   return (
     <div style={{ height, width }}>
-      {data.map(item => (
+      {data.map((item, index) => (
         <MeasurableCell
-          onMeasure={(cellMeasurement) => {
+          key={index}
+          index={index}
+          onMeasure={cellMeasurement => {
             handleMeasure(item.id, cellMeasurement);
           }}
         >
