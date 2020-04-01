@@ -17,7 +17,7 @@ const DynamicList = ({
     if (variableListRef.current) {
       variableListRef.current.resetAfterIndex(0);
     }
-  }, data);
+  }, [data.length]);
 
   const handleMeasurementFinish = newMeasurements => {
     setMeasurements(newMeasurements);
