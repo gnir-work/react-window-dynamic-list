@@ -1,7 +1,8 @@
 {
   "name": "react-window-dynamic-list",
-  "version": "1.0.0",
-  "description": "Made with create-react-library",
+  "version": "1.0.1",
+  "description": "A naive approach for virtualizing a list with dynamically sized items",
+  "keywords": ["react-window", "dynamically", "measurement", "virtualized"],
   "author": "gnir-work",
   "license": "MIT",
   "repository": "gnir-work/react-window-dynamic-list",
