@@ -2,7 +2,12 @@
   "name": "react-window-dynamic-list",
   "version": "1.0.1",
   "description": "A naive approach for virtualizing a list with dynamically sized items",
-  "keywords": ["react-window", "dynamically", "measurement", "virtualized"],
+  "keywords": [
+    "react-window",
+    "dynamically",
+    "measurement",
+    "virtualized"
+  ],
   "author": "gnir-work",
   "license": "MIT",
   "repository": "gnir-work/react-window-dynamic-list",
@@ -22,13 +27,14 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "bump": "bump --commit --tag --push"
   },
   "peerDependencies": {
     "react": "^16.0.0"
   },
   "devDependencies": {
-    "microbundle-crl": "^0.13.8",
+    "@jsdevtools/version-bump-prompt": "^6.0.3",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
@@ -42,6 +48,7 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
+    "microbundle-crl": "^0.13.8",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "react": "^16.13.1",
