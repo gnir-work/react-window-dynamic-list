@@ -29,10 +29,10 @@ This solution is a really naive one, basically we do the following actions:
 3. Remove the list.
 4. Render the virtualized list using the cached sizes.
 
-## Requirements and Limitations
+## :warning: Requirements and Limitations :warning:
 #### Restrictions:
 1. It is feasible and possible (you have all of the data at hand) to load the data at the beginning for a brief time.
-2. Your data doesn't change size
+2. Your data doesn't change its size
 3. You don't add new items to the list (filtering works :))
 4. Currently this only supports vertical layout. (didn't have time to implement support for horizontal)
  
