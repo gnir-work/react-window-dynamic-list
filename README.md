@@ -8,7 +8,7 @@
 This library comes to partly solve the case of rendering dynamically sized items with [react-window](https://github.com/bvaughn/react-window).
 For more information about the issue please read [this thread](https://github.com/bvaughn/react-window/issues/6).
 
-Before you overjoy please read the [limitations](#requirements-and-limitations) of this approach down bellow :sleepy:
+Before you overjoy please read the [limitations](#warning-requirements-and-limitations-warning) of this approach down bellow :sleepy:
 
 #### Demo
 👉 [check out dynamic list in action](https://gnir-work.github.io/react-window-dynamic-list/)
