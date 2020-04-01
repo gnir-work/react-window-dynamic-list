@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-import useDimensions from "react-use-dimensions";
-
-const MeasurableCell = ({ children, onMeasure, index }) => {
-  const [ref, { width, height }] = useDimensions();
+const Test = ({ input, output, onMeasure, id }) => {
+  const ref = useRef();
 
   useEffect(() => {
-    if (!isNaN(height) && !isNaN(width)) {
-      onMeasure({ height, width });
-    }
-  }, [width, height]);
+    console.log(ref);
+    onMeasure({ height: ref.current.offsetHeight, id });
+  }, [id, onMeasure]);
 
-  return <div ref={ref}>{children({ index })}</div>;
+  return (
+    <div ref={ref}>
+      <pre style={{ color: "green" }}>{input}</pre>
+      <pre style={{ whiteSpace: "inherit" }}>{output}</pre>
+    </div>
+  );
 };
 
-export default MeasurableCell;
+export default Test;

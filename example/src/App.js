@@ -2,11 +2,11 @@ import React from 'react'
 
 import { ExampleComponent } from 'react-window-dynamic-list'
 import 'react-window-dynamic-list/dist/index.css'
-import { generateData } from "./utils";
+import { generateCommands } from "./utils";
 
 
 const App = () => {
-  return <ExampleComponent data={generateData()} />
+  return <ExampleComponent data={generateCommands()} />
 }
 
 export default App

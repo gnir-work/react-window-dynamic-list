@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export const possibleTexts = [
+export const possibleOutputs = [
     `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Duis non nulla rhoncus, suscipit dolor nec, vehicula leo.
     Curabitur ac metus eu nisl venenatis dapibus.
@@ -65,9 +65,11 @@ export const possibleTexts = [
     `,
 ]
 
-export const generateData = () => (
-    _.range(0, 200).map(index => ({
+export const generateCommands = () => (
+    _.range(0, 1000).map(index => ({
         id: index,
-        text: _.sample(possibleTexts)
+        title: `some title ${index}`,
+        input: `some input ${index}`,
+        output: _.sample(possibleOutputs)
     }))
 )

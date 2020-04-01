@@ -8,8 +8,6 @@ export const ExampleComponent = ({ data }) => {
       width={300}
       height={600}
       onMeasurementFinish={console.log}
-    >
-      {({ index }) => <div> {data[index].text} </div>}
-    </MeasurableList>
+    />
   );
 };

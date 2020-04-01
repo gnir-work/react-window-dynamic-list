@@ -1,38 +1,30 @@
 import React from "react";
-
 import MeasurableCell from "./MeasurableCell";
 
-const MeasurableList = ({
-  children,
-  width,
-  height,
-  onMeasurementFinish,
-  data
-}) => {
-  const measurements = {};
 
-  const handleMeasure = (id, cellMeasurement) => {
-    measurements[id] = cellMeasurement;
-    if (Object.values(measurements).length === data.length) {
-      onMeasurementFinish(measurements);
+const ListMeasurement = ({ data, onMeasurementFinish, width, height }) => {
+  const mapping = {};
+
+  const handleMeasure = ({ id, height }) => {
+    mapping[id] = height;
+    if (Object.values(mapping).length === data.length) {
+      onMeasurementFinish(mapping);
     }
   };
 
   return (
-    <div style={{ height, width, overflowX: "auto" }}>
-      {data.map((item, index) => (
+    <div style={{ width, height, overflowY: "auto" }}>
+      {data.map(command => (
         <MeasurableCell
-          key={index}
-          index={index}
-          onMeasure={cellMeasurement => {
-            handleMeasure(item.id, cellMeasurement);
-          }}
-        >
-          {children}
-        </MeasurableCell>
+          key={command.id}
+          onMeasure={handleMeasure}
+          id={command.id}
+          output={command.output}
+          input={command.input}
+        />
       ))}
     </div>
   );
 };
 
-export default MeasurableList;
+export default ListMeasurement;
