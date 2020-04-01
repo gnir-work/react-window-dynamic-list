@@ -6,7 +6,6 @@
 
 ## How is this different from `react-window`?
 This library comes to partly solve the case of rendering dynamically sized items with [react-window](https://github.com/bvaughn/react-window).
-
 For more information about the issue please read [this thread](https://github.com/bvaughn/react-window/issues/6).
 
 Before you overjoy please read the [limitations](#requirements-and-limitations) of this approach down bellow :sleepy:
@@ -23,6 +22,11 @@ npm install --save react-window-dynamic-list
 ## Usage
 ![Usage Preview](docs/carbon.png)
 
+Yep. its that simple :satisfied:
+
+The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with two small changes.
+1. Instead of `itemCount` you must pass `data` ([read more](#data-prop)).
+2. We handle `itemSize` and `estimatedItemSize` for you :sunglasses:
 
 ## Implementations details
 This solution is a really naive one, basically we do the following actions:
@@ -38,8 +42,9 @@ This solution is a really naive one, basically we do the following actions:
 3. You don't add new items to the list (filtering works :smirk:)
 4. Currently this only supports vertical layout. (didn't have time to implement support for horizontal)
  
-#### Requirements:
-1. Each item in the data set must have a unique id.
+## Data prop
+The data props is expected to be an array of objects where each object contains an `id` field.
+![dataProp](docs/dataProp.png)
 
 ## License
 
