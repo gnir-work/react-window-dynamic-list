@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { VariableSizeList } from "react-window";
 import MeasurableList from "./MeasurableList";
 
