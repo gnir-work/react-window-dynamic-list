@@ -1,15 +1,56 @@
-import React from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
+import { VariableSizeList } from "react-window";
 import MeasurableList from "./MeasurableList";
-import DynamicList from "./DynamicList";
 
-export const ExampleComponent = ({ data }) => {
-  return (
-    <DynamicList data={data} width={300} height={600}>
-      {({ index, style }) => (
-        <div style={style}>
-          <pre style={{ whiteSpace: "inherit" }}>{data[index].output}</pre>{" "}
-        </div>
-      )}
-    </DynamicList>
+const DynamicList = ({
+  children,
+  data,
+  height,
+  width,
+  ...variableSizeListProps
+}) => {
+  const variableListRef = useRef();
+  const [measuring, setMeasuring] = useState(true);
+  const [measurements, setMeasurements] = useState({});
+
+  useEffect(() => {
+    if (variableListRef.current) {
+      variableListRef.current.resetAfterIndex(0);
+    }
+  }, data);
+
+  const handleMeasurementFinish = newMeasurements => {
+    setMeasurements(newMeasurements);
+    setMeasuring(false);
+  };
+
+  const itemSize = index => {
+    const height = measurements[data[index].id];
+    console.log(height);
+    return height;
+  };
+
+  return !measuring ? (
+    <VariableSizeList
+      ref={variableListRef}
+      itemSize={itemSize}
+      height={height}
+      width={width}
+      itemCount={data.length}
+      {...variableSizeListProps}
+    >
+      {children}
+    </VariableSizeList>
+  ) : (
+    <MeasurableList
+      height={height}
+      width={width}
+      data={data}
+      onMeasurementFinish={handleMeasurementFinish}
+    >
+      {children}
+    </MeasurableList>
   );
 };
+
+export default DynamicList;
