@@ -19,7 +19,7 @@ const MeasurableList = ({
   };
 
   return (
-    <div style={{ height, width }}>
+    <div style={{ height, width, overflowX: "auto" }}>
       {data.map((item, index) => (
         <MeasurableCell
           key={index}
