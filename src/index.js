@@ -31,6 +31,7 @@ const DynamicList = (
     width,
     onRefSet = () => {},
     layout = "vertical",
+    cache,
     ...variableSizeListProps
   },
   ref
@@ -54,14 +55,24 @@ const DynamicList = (
     }
   }, [data.length]);
 
-  const itemSize = index => {
+  const measureIndex = index => {
     const test = (
       <div style={{ width, height, overflowY: "auto" }}>
         <div style={{ overflow: "auto" }}>{children({ index })}</div>
       </div>
     );
-
     return measureElement(test).height;
+  };
+
+  const itemSize = index => {
+    const { id } = data[index];
+    if (cache[id]) {
+      return cache[id];
+    } else {
+      const height = measureIndex(index);
+      cache[id] = height;
+      return height;
+    }
   };
 
   return (

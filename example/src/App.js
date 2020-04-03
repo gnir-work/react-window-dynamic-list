@@ -8,6 +8,7 @@ import { Input, InputNumber, Button } from "antd";
 import "antd/dist/antd.compact.min.css"
 import "./App.css"
 
+const cache = {};
 
 const App = () => {
   const [commands, setCommands] = useState(generateCommands());
@@ -59,7 +60,7 @@ const App = () => {
       <div>
       </div>
       <div className="dynamic-list-container">
-        {shouldShowList && <DynamicList ref={dynamicListRef} data={filteredCommands} width={600} height={600}>
+        {shouldShowList && <DynamicList cache={cache} ref={dynamicListRef} data={filteredCommands} width={600} height={600}>
           {({ index, style }) => (
             <div style={style}>
               <h3> Row - {index} </h3>
