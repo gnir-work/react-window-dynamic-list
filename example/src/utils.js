@@ -65,11 +65,13 @@ export const possibleOutputs = [
     `,
 ]
 
+export const generateCommand = (index) => ({
+    id: index,
+    title: `some title ${index}`,
+    input: `some input ${index}`,
+    output: _.sample(possibleOutputs)
+})
+
 export const generateCommands = () => (
-    _.range(0, 1000).map(index => ({
-        id: index,
-        title: `some title ${index}`,
-        input: `some input ${index}`,
-        output: _.sample(possibleOutputs)
-    }))
+    _.range(0, 1000).map(generateCommand)
 )

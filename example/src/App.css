@@ -9,7 +9,7 @@ content .dynamic-list-container {
 }
 
 content .filter-container {
-    width: 30em;
+    width: 600px;
     margin: auto;
     margin-bottom: 2em;
     display: flex;
