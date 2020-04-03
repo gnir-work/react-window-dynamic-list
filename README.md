@@ -22,32 +22,45 @@ npm install --save react-window-dynamic-list
 ![Usage Preview](docs/carbon.png)
 
 Yep. its that simple :satisfied:  
-The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with small changes and additions.
+
+## API
+The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with some small changes and additions.
 #### Changes
-1. Instead of `itemCount` you must pass `data` ([read more](#data-prop))
+1. Instead of `itemCount` you must pass `data` ([read more](#additions))
 2. We handle `itemSize` and `estimatedItemSize` for you :sunglasses:
 
 #### Additions
-| Property          | Type               | Required? | Description                                                                                                                                                                                                                                                                                               |
-| :---------------- | :----------------- | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| onRefSet        | Function            |           | This callback will be called when the virtualized list is rendered and the ref to the list is set. <br>  For example if you want to scroll to an item on mount use `onRefSet` instead of `useEffect` because the virtualized list is rendered only after measurement.                                                                                                                              |
-
+| Property          | Type               | Required? | Default | Description                                                                                                                                                                                                                                                                                               |
+| :---------------- | :----------------- | :-------: | :--: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data        | Object[]            |       ✓    | | All of the data that will be displayed in the list. <br />Each `object                                                                 ` must contain an unique `id` field.<br />For example: `[{id: 1, ...}, {id: 2, ....}`]                                                              |
+| cache        | Object            |      ✓     | | The cache object which the list will use for caching the calculated sizes.<br />Check the [example](#usage) for how to create it.                                                                                                                              |
+| lazyMeasurement        | boolean            |  | `true`        | Wether the application should fill the cache in the background.<br />For more information read the [caching section](#caching).                                                      |
 ## Implementations details
-This solution is a really naive one, basically we do the following actions:
-1. Render the whole list, without windowing!
-2. measure all of the cells and cache the size.
-3. Remove the list.
-4. Render the virtualized list using the cached sizes.
+### TL;DR:
+Just in time measurement with caching in the background.  
+
+### Details:  
+The algorithm is divided into two main concepts:  
+#### Just in time measurements:
+We measure each item in the list by temporary rendering it with `react-dom` in a different application.
+For more information please read [this great article](https://medium.com/trabe/measuring-non-rendered-elements-in-react-with-portals-c5b7c51aec25).
+
+#### Caching:
+In order for just in time measurements to be effective we need to cache the measurements.  
+Currently there are two caching modes:  
+
+1. Cache only the items that were rendered
+2. On top of caching the rendered items a background task will measure each element and fill the cache.  
+   This is the __default behavior__ as it gives a significant performance boost, especially in case of manipulating the data before scrolling through it.  
+   In exchange there is a mild slow down in overall performance in the first couple of seconds.
+
+
 
 ## :warning: Requirements and Limitations :warning:
-1. It is feasible and possible (you have all of the data at hand) to load the data at the beginning for a brief time.
-2. Your data doesn't change its size
-3. You don't add new items to the list (filtering works :smirk:)
-4. Currently this only supports vertical layout. (didn't have time to implement support for horizontal)
- 
-## Data prop
-The data props is expected to be an array of objects where each object contains an `id` field.
-![dataProp](docs/dataProp.png)
+1. Your data doesn't change its size.
+2. Currently only supports vertical layout. (didn't have time to implement support for horizontal)
+3. All of the styling regarding the items __must__ be `inline` or not affected by location in the `DOM`.
+
 
 ## License
 
