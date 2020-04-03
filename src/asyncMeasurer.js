@@ -7,8 +7,10 @@ const containerStyle = {
   zIndex: -1
 };
 
+/**
+ * Creates the hidden div appended to the document body
+ */
 export const createMeasureLayer = () => {
-  // Creates the hidden div appended to the document body
   const container = document.createElement("div");
   container.setAttribute("id", "measure-layer");
   container.style = containerStyle;
@@ -16,11 +18,19 @@ export const createMeasureLayer = () => {
   return container;
 };
 
+
+/**
+ * Destroy the measuring layer.
+ * Should be called when the dynamic list is unmounted.
+ */
 export const destroyMeasureLayer = () => {
   const container = document.querySelector("#measure-layer");
   container.parentNode.removeChild(container);
 };
 
+/**
+ * Measure an element by temporary rendering it.
+ */
 const measureElement = element => {
   const container =
     document.querySelector("#measure-layer") || createMeasureLayer();
@@ -31,9 +41,9 @@ const measureElement = element => {
   // Gets the element size
   const child = container.querySelector("div").querySelector("div");
   const height = child.offsetHeight;
-  const width = child.clientWidth;
+  const width = child.offsetWidth;
 
-  // Removes the element and its wrapper from the document
+  // Removes the element from the document
   ReactDOM.unmountComponentAtNode(container);
 
   return { height, width };
