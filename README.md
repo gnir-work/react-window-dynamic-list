@@ -24,7 +24,7 @@ npm install --save react-window-dynamic-list
 Yep. its that simple :satisfied:  
 The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with small changes and additions.
 #### Changes
-1. Instead of `itemCount` you must pass `data` ([read more](#data-prop)
+1. Instead of `itemCount` you must pass `data` ([read more](#data-prop))
 2. We handle `itemSize` and `estimatedItemSize` for you :sunglasses:
 
 #### Additions
