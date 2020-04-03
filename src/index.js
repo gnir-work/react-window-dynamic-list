@@ -1,6 +1,6 @@
-import React, { useState, useEffect, forwardRef, useRef } from "react";
+import React, { useEffect, forwardRef, useRef } from "react";
 import { VariableSizeList } from "react-window";
-import MeasurableList from "./MeasurableList";
+import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
  * TL;DR
@@ -35,23 +35,15 @@ const DynamicList = (
   },
   ref
 ) => {
-  const [measuring, setMeasuring] = useState(true);
-  const [measurements, setMeasurements] = useState({});
   const localRef = useRef();
   const listRef = ref || localRef;
 
   /**
-   * Because the real virtualized list is mounted only after we finished measuring obtaining its ref
-   * from the parent component on mount doesn't work (as it doesn't exists it).
-   * However scrolling to a row on mount is common use case, so instead of scrolling on the mount of the parent
-   * component you we export the onRefSet callback.
+   * Set up measuring layer
    */
-  const setRef = current => {
-    if (current && !listRef.current) {
-      listRef.current = current;
-      onRefSet();
-    }
-  };
+  useEffect(() => {
+    return destroyMeasureLayer;
+  }, []);
 
   /**
    * In case the data length changed we need to reassign the current size to all of the indexes.
@@ -62,20 +54,22 @@ const DynamicList = (
     }
   }, [data.length]);
 
-  const handleMeasurementFinish = newMeasurements => {
-    setMeasurements(newMeasurements);
-    setMeasuring(false);
-  };
-
   const itemSize = index => {
-    const height = measurements[data[index].id];
-    return height;
+    const test = (
+      <div style={{ width, height, overflowY: "auto" }}>
+        <div style={{ overflow: "auto" }} ref={ref}>
+          {children({ index })}
+        </div>
+      </div>
+    );
+
+    return measureElement(test).height;
   };
 
-  return !measuring ? (
+  return (
     <VariableSizeList
       layout={layout}
-      ref={setRef}
+      ref={listRef}
       itemSize={itemSize}
       height={height}
       width={width}
@@ -84,15 +78,6 @@ const DynamicList = (
     >
       {children}
     </VariableSizeList>
-  ) : (
-    <MeasurableList
-      height={height}
-      width={width}
-      data={data}
-      onMeasurementFinish={handleMeasurementFinish}
-    >
-      {children}
-    </MeasurableList>
   );
 };
 
