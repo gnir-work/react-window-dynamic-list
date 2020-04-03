@@ -3,6 +3,14 @@ import { VariableSizeList } from "react-window";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
+ * Create the dynamic lists cache object.
+ * @param {Object} knownSizes a mapping between an items id and its size.
+ */
+export const createCache = (knownSizes = {}) => ({
+  ...knownSizes
+});
+
+/**
  * TL;DR
  * A virtualized list which handles item of varying sizes.
  *
@@ -29,9 +37,10 @@ const DynamicList = (
     data,
     height,
     width,
+    cache,
+    lazyMeasurement = true,
     onRefSet = () => {},
     layout = "vertical",
-    cache,
     ...variableSizeListProps
   },
   ref
@@ -40,9 +49,46 @@ const DynamicList = (
   const listRef = ref || localRef;
 
   /**
+   * Measure a specific item.
+   * @param {number} index The index of the item in the data array.
+   */
+  const measureIndex = index => {
+    const WrappedItem = (
+      <div style={{ width, height, overflowY: "auto" }}>
+        <div style={{ overflow: "auto" }}>{children({ index })}</div>
+      </div>
+    );
+    const { height: measuredHeight } = measureElement(WrappedItem);
+    return measuredHeight;
+  };
+
+  /**
+   * Measure all of the items in the background.
+   * This could be a little tough in the site in the first seconds however it allows
+   * fast jumping.
+   */
+  const lazyCacheFill = () => {
+    data.forEach(({ id }, index) => {
+      setTimeout(() => {
+        if (!cache[id]) {
+          const height = measureIndex(index);
+
+          // Double check in case the main thread already populated this id
+          if (!cache[id]) {
+            cache[id] = height;
+          }
+        }
+      }, 0);
+    });
+  };
+
+  /**
    * Set up measuring layer
    */
   useEffect(() => {
+    if (lazyMeasurement) {
+      lazyCacheFill();
+    }
     return destroyMeasureLayer;
   }, []);
 
@@ -54,15 +100,6 @@ const DynamicList = (
       listRef.current.resetAfterIndex(0);
     }
   }, [data.length]);
-
-  const measureIndex = index => {
-    const test = (
-      <div style={{ width, height, overflowY: "auto" }}>
-        <div style={{ overflow: "auto" }}>{children({ index })}</div>
-      </div>
-    );
-    return measureElement(test).height;
-  };
 
   const itemSize = index => {
     const { id } = data[index];

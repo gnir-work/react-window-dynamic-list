@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 
-import DynamicList from 'react-window-dynamic-list'
+import DynamicList, { createCache } from 'react-window-dynamic-list'
 import 'react-window-dynamic-list/dist/index.css'
 import { generateCommands, generateCommand } from "./utils";
 import { Input, InputNumber, Button } from "antd";
@@ -8,7 +8,7 @@ import { Input, InputNumber, Button } from "antd";
 import "antd/dist/antd.compact.min.css"
 import "./App.css"
 
-const cache = {};
+const cache = createCache();
 
 const App = () => {
   const [commands, setCommands] = useState(generateCommands());
@@ -42,7 +42,7 @@ const App = () => {
     if (shouldShowList) {
       jumpToRow()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldShowList])
 
   return <div>
