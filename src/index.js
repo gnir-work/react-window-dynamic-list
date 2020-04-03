@@ -57,9 +57,7 @@ const DynamicList = (
   const itemSize = index => {
     const test = (
       <div style={{ width, height, overflowY: "auto" }}>
-        <div style={{ overflow: "auto" }} ref={ref}>
-          {children({ index })}
-        </div>
+        <div style={{ overflow: "auto" }}>{children({ index })}</div>
       </div>
     );
 
