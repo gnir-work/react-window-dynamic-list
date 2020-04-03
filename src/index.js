@@ -29,6 +29,7 @@ const DynamicList = (
     data,
     height,
     width,
+    onRefSet = () => {},
     layout = "vertical",
     ...variableSizeListProps
   },
@@ -36,14 +37,28 @@ const DynamicList = (
 ) => {
   const [measuring, setMeasuring] = useState(true);
   const [measurements, setMeasurements] = useState({});
-  const localRef = ref || useRef();
+  const localRef = useRef();
+  const listRef = ref || localRef;
+
+  /**
+   * Because the real virtualized list is mounted only after we finished measuring obtaining its ref
+   * from the parent component on mount doesn't work (as it doesn't exists it).
+   * However scrolling to a row on mount is common use case, so instead of scrolling on the mount of the parent
+   * component you we export the onRefSet callback.
+   */
+  const setRef = current => {
+    if (current && !listRef.current) {
+      listRef.current = current;
+      onRefSet();
+    }
+  };
 
   /**
    * In case the data length changed we need to reassign the current size to all of the indexes.
    */
   useEffect(() => {
-    if (localRef.current) {
-      localRef.current.resetAfterIndex(0);
+    if (listRef.current) {
+      listRef.current.resetAfterIndex(0);
     }
   }, [data.length]);
 
@@ -60,7 +75,7 @@ const DynamicList = (
   return !measuring ? (
     <VariableSizeList
       layout={layout}
-      ref={localRef}
+      ref={setRef}
       itemSize={itemSize}
       height={height}
       width={width}
