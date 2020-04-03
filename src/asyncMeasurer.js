@@ -18,14 +18,15 @@ export const createMeasureLayer = () => {
   return container;
 };
 
-
 /**
  * Destroy the measuring layer.
  * Should be called when the dynamic list is unmounted.
  */
 export const destroyMeasureLayer = () => {
   const container = document.querySelector("#measure-layer");
-  container.parentNode.removeChild(container);
+  if (container) {
+    container.parentNode.removeChild(container);
+  }
 };
 
 /**
