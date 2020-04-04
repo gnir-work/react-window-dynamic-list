@@ -38,7 +38,12 @@ const DynamicList = (
   const measureIndex = index => {
     const WrappedItem = (
       <div style={{ width, height, overflowY: "auto" }}>
-        <div style={{ overflow: "auto" }}>{children({ index })}</div>
+        <div
+          id="item-container"
+          style={{ overflow: "auto", overflowY: "scroll" }}
+        >
+          {children({ index })}
+        </div>
       </div>
     );
     const { height: measuredHeight } = measureElement(WrappedItem);
