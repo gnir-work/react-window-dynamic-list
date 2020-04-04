@@ -40,7 +40,7 @@ const measureElement = element => {
   ReactDOM.render(element, container);
 
   // Gets the element size
-  const child = container.querySelector("div").querySelector("div");
+  const child = container.querySelector("#item-container");
   const height = child.offsetHeight;
   const width = child.offsetWidth;
 
