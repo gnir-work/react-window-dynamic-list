@@ -58,8 +58,11 @@ Currently there are two caching modes:
 
 ## :warning: Requirements and Limitations :warning:
 1. Your data doesn't change its size.
+   *  Your items size must be determined on mount (No `ajax` or images).
 2. Currently only supports vertical layout. (didn't have time to implement support for horizontal)
 3. All of the styling regarding the items __must__ be `inline` or not affected by location in the `DOM`.
+4. Changes to the list's scrollbar, especially the width, should effect all of the scrollbars in the application.
+   * Since we pre render the items in order to measure them the size of the scrollbar is important in the pre rendered item as well.
 
 
 ## License
