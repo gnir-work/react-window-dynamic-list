@@ -67,6 +67,7 @@
     "dist"
   ],
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "react-window": "^1.8.5"
   }
 }

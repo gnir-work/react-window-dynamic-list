@@ -1,6 +1,7 @@
 import React, { useEffect, forwardRef, useRef, useLayoutEffect } from "react";
 import { VariableSizeList } from "react-window";
 import Cache from "./cache";
+import debounce from "lodash.debounce";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
@@ -38,11 +39,6 @@ const DynamicList = (
   if (recalculateItemsOnResize.height) {
     containerResizeDeps.push(height);
   }
-
-  useLayoutEffect(() => {
-    cache.clearCache();
-    listRef.current.resetAfterIndex(0);
-  }, containerResizeDeps);
 
   /**
    * Measure a specific item.
@@ -84,6 +80,12 @@ const DynamicList = (
     });
   };
 
+  const handleListResize = debounce(() => {
+    cache.clearCache();
+    listRef.current.resetAfterIndex(0);
+    lazyCacheFill();
+  }, 50);
+
   /**
    * Initiate cache filling and handle cleanup of measurement layer.
    */
@@ -93,6 +95,13 @@ const DynamicList = (
     }
     return destroyMeasureLayer;
   }, []);
+
+  /**
+   * Recalculate items size of the list size has changed.
+   */
+  useLayoutEffect(() => {
+    handleListResize();
+  }, containerResizeDeps);
 
   /**
    * In case the data length changed we need to reassign the current size to all of the indexes.
