@@ -7,7 +7,11 @@
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "react-window-dynamic-list": "file:.."
+    "react-window-dynamic-list": "file:..",
+    "antd": "^4.1.2",
+    "lodash": "^4.17.15",
+    "react-resizable": "^1.10.1",
+    "react-virtualized-auto-sizer": "^1.0.2"
   },
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
