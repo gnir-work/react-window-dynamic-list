@@ -23,7 +23,7 @@ const DynamicList = (
     lazyMeasurement = true,
     onRefSet = () => {},
     layout = "vertical",
-    resizeOnContainerChange = { width: true, height: true },
+    recalculateItemsOnResize = { width: true, height: true },
     ...variableSizeListProps
   },
   ref
@@ -32,10 +32,10 @@ const DynamicList = (
   const listRef = ref || localRef;
   const containerResizeDeps = [];
 
-  if (resizeOnContainerChange.width) {
+  if (recalculateItemsOnResize.width) {
     containerResizeDeps.push(width);
   }
-  if (resizeOnContainerChange.height) {
+  if (recalculateItemsOnResize.height) {
     containerResizeDeps.push(height);
   }
 
