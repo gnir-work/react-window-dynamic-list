@@ -2,15 +2,26 @@ header {
   text-align: center;
 }
 
-content .dynamic-list-container {
-  margin: auto;
+label {
+  white-space: pre;
+}
+
+.row {
   display: flex;
-  justify-content: center;
+  align-items: center;
+}
+
+.resizable-container {
+  margin: auto;
+}
+
+content .dynamic-list-container {
+  width: 100%;
+  height: 100%;
 }
 
 content .filter-container {
     width: 600px;
     margin: auto;
     margin-bottom: 2em;
-    display: flex;
 }

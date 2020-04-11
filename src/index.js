@@ -1,14 +1,13 @@
-import React, { useEffect, forwardRef, useRef } from "react";
+import React, { useEffect, forwardRef, useRef, useLayoutEffect } from "react";
 import { VariableSizeList } from "react-window";
+import Cache from "./cache";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
  * Create the dynamic list's cache object.
  * @param {Object} knownSizes a mapping between an items id and its size.
  */
-export const createCache = (knownSizes = {}) => ({
-  ...knownSizes
-});
+export const createCache = (knownSizes = {}) => new Cache(knownSizes);
 
 /**
  * A virtualized list which handles item of varying sizes.
@@ -24,12 +23,26 @@ const DynamicList = (
     lazyMeasurement = true,
     onRefSet = () => {},
     layout = "vertical",
+    recalculateItemsOnResize = { width: true, height: true },
     ...variableSizeListProps
   },
   ref
 ) => {
   const localRef = useRef();
   const listRef = ref || localRef;
+  const containerResizeDeps = [];
+
+  if (recalculateItemsOnResize.width) {
+    containerResizeDeps.push(width);
+  }
+  if (recalculateItemsOnResize.height) {
+    containerResizeDeps.push(height);
+  }
+
+  useLayoutEffect(() => {
+    cache.clearCache();
+    listRef.current.resetAfterIndex(0);
+  }, containerResizeDeps);
 
   /**
    * Measure a specific item.
@@ -59,12 +72,12 @@ const DynamicList = (
     data.forEach(({ id }, index) => {
       // We use set timeout here in order to execute the measuring in a background thread.
       setTimeout(() => {
-        if (!cache[id]) {
+        if (!cache.values[id]) {
           const height = measureIndex(index);
 
           // Double check in case the main thread already populated this id
-          if (!cache[id]) {
-            cache[id] = height;
+          if (!cache.values[id]) {
+            cache.values[id] = height;
           }
         }
       }, 0);
@@ -96,11 +109,11 @@ const DynamicList = (
    */
   const itemSize = index => {
     const { id } = data[index];
-    if (cache[id]) {
-      return cache[id];
+    if (cache.values[id]) {
+      return cache.values[id];
     } else {
       const height = measureIndex(index);
-      cache[id] = height;
+      cache.values[id] = height;
       return height;
     }
   };

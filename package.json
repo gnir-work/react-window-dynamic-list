@@ -67,7 +67,6 @@
     "dist"
   ],
   "dependencies": {
-    "react-use-dimensions": "^1.2.1",
     "react-window": "^1.8.5"
   }
 }
