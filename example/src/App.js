@@ -54,24 +54,33 @@ const App = () => {
       </header>
       <content>
         <div className="filter-container">
-          <Input
-            value={filter}
-            onChange={handleFilterChange}
-            placeholder="Try filtering..."
-          />
-          <InputNumber
-            min={0}
-            max={filteredCommands.length - 1}
-            step={20}
-            onChange={setRow}
-            value={row}
-          />
-          <Button onClick={jumpToRow}> Jump! </Button>
-          <Button onClick={addCommand}> Add Item </Button>
-          <Button onClick={() => setShouldShowList(!shouldShowList)}>
-            {" "}
-            Toggle list{" "}
-          </Button>
+          <div className="row">
+          <label> Text Filter: </label>
+            <Input
+              value={filter}
+              onChange={handleFilterChange}
+              placeholder="Try filtering..."
+            />
+          </div>
+          <div className="row">
+            <label> Actions: </label>
+            <div>
+              <InputNumber
+                min={0}
+                max={filteredCommands.length - 1}
+                step={20}
+                onChange={setRow}
+                value={row}
+              />
+              <Button onClick={jumpToRow}> Jump! </Button>
+            </div>
+            <Button onClick={addCommand}> Add Item </Button>
+            <Button onClick={() => setShouldShowList(!shouldShowList)}>
+              {" "}
+              Toggle list{" "}
+            </Button>
+          </div>
+          
         </div>
         <div></div>
         <ResizableBox width={600} height={500} className="resizable-container">

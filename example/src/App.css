@@ -2,6 +2,15 @@ header {
   text-align: center;
 }
 
+label {
+  white-space: pre;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
 .resizable-container {
   margin: auto;
 }
@@ -15,5 +24,4 @@ content .filter-container {
     width: 600px;
     margin: auto;
     margin-bottom: 2em;
-    display: flex;
 }
