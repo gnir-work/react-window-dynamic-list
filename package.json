@@ -67,7 +67,11 @@
     "dist"
   ],
   "dependencies": {
+    "antd": "^4.1.2",
+    "lodash": "^4.17.15",
+    "react-resizable": "^1.10.1",
     "react-use-dimensions": "^1.2.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5"
   }
 }
