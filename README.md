@@ -42,7 +42,7 @@ The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/Vari
 | data                    | Object[] |     ✓     |                                 | All of the data that will be displayed in the list. <br />Each `object` must contain an unique `id` field.<br />For example: `[{id: 1, ...}, {id: 2, ....}`] |
 | cache                   | Object   |     ✓     |                                 | The cache object which the list will use for caching the calculated sizes.<br />Check the [example](#usage) for how to create it.                            |
 | lazyMeasurement         | boolean  |           |             `true`              | Wether the application should fill the cache in the background.<br />For more information read the [caching section](#caching).                              |
-| recalculateItemsOnResize | Object   |           | `{ width: true, height: true }` | Wether the list should recalculate the items size if its own size has changed.                               |
+| recalculateItemsOnResize | Object   |           | `{ width: true, height: true }` | Wether the list should recalculate the items size if its own size has changed. This value __should not__ change from its initial one.                               |
 
 ## Implementations details
 
