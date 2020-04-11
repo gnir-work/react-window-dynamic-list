@@ -6,8 +6,8 @@
 
 ## How is this different from `react-window`?
 
-This library comes to partly solve the case of rendering dynamically sized items with [react-window](https://github.com/bvaughn/react-window).
-For more information about the issue please read [this thread](https://github.com/bvaughn/react-window/issues/6).  
+This library comes to partly solve the case of rendering dynamically sized items with [react-window](https://github.com/bvaughn/react-window),
+for more information about the issue please read [this thread](https://github.com/bvaughn/react-window/issues/6).  
 Before you overjoy please read the [limitations](#warning-requirements-and-limitations-warning) of this approach down bellow :sleepy:
 
 ## Demo
@@ -56,7 +56,7 @@ The algorithm is divided into two main concepts:
 
 #### Just in time measurements:
 
-We measure each item in the list by temporary rendering it with `react-dom` in a different application.
+We measure each item in the list by temporary rendering it with `react-dom` in a different application.  
 For more information please read [this great article](https://medium.com/trabe/measuring-non-rendered-elements-in-react-with-portals-c5b7c51aec25).
 
 #### Caching:
