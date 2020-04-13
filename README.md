@@ -14,6 +14,8 @@ Before you overjoy please read the [limitations](#warning-requirements-and-limit
 
 👉 [check out dynamic list in action](https://gnir-work.github.io/react-window-dynamic-list/)
 
+:pencil2: [Play with the demo in sandbox](https://codesandbox.io/s/react-window-dynamic-list-example-iwvis?file=/src/App.js)
+
 ## Install
 
 ```bash
