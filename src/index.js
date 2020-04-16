@@ -8,7 +8,7 @@ import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
  * Share forwarded ref.
  * https://gist.github.com/pie6k/b4717f392d773a71f67e110b42927fea
  */
-const useShareForwardedRef = forwardedRef {
+const useShareForwardedRef = forwardedRef => {
   const innerRef = useRef(null);
 
   useEffect(() => {
