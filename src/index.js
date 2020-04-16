@@ -5,6 +5,28 @@ import debounce from "lodash.debounce";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
+ * Share forwarded ref.
+ * https://gist.github.com/pie6k/b4717f392d773a71f67e110b42927fea
+ */
+const useShareForwardedRef = forwardedRef {
+  const innerRef = useRef(null);
+
+  useEffect(() => {
+    if (!forwardedRef) {
+      return;
+    }
+    if (typeof forwardedRef === 'function') {
+      forwardedRef(innerRef.current);
+      return;
+    } else {
+      forwardedRef.current = innerRef.current;
+    }
+  });
+
+  return innerRef;
+};
+
+/**
  * Create the dynamic list's cache object.
  * @param {Object} knownSizes a mapping between an items id and its size.
  */
@@ -29,8 +51,7 @@ const DynamicList = (
   },
   ref
 ) => {
-  const localRef = useRef();
-  const listRef = ref || localRef;
+  const listRef = useShareForwardedRef(ref);
   const containerResizeDeps = [];
 
   if (recalculateItemsOnResize.width) {
