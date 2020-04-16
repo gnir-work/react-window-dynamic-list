@@ -15,9 +15,8 @@ const useShareForwardedRef = forwardedRef => {
     if (!forwardedRef) {
       return;
     }
-    if (typeof forwardedRef === 'function') {
+    if (typeof forwardedRef === "function") {
       forwardedRef(innerRef.current);
-      return;
     } else {
       forwardedRef.current = innerRef.current;
     }
