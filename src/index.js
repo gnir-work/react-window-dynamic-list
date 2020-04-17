@@ -26,7 +26,7 @@ const DynamicList = (
     cache,
     lazyMeasurement = true,
     recalculateItemsOnResize = { width: true, height: true },
-    measurementLayerElement = defaultMeasurementContainer,
+    measurementContainerElement = defaultMeasurementContainer,
     debug = true,
     ...variableSizeListProps
   },
@@ -48,16 +48,13 @@ const DynamicList = (
    */
   const measureIndex = index => {
     const ItemContainer = (
-      <div
-        id="item-container"
-        style={{ overflow: "auto", overflowY: "scroll" }}
-      >
+      <div id="item-container" style={{ overflow: "auto" }}>
         {children({ index })}
       </div>
     );
 
-    const MeasurementContainer = measurementLayerElement({
-      style: { width, height, overflowY: "auto" },
+    const MeasurementContainer = measurementContainerElement({
+      style: { width, height, overflowY: "scroll" },
       children: ItemContainer
     });
 
