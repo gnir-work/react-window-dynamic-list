@@ -1,7 +1,9 @@
-import React, { useEffect, forwardRef, useRef, useLayoutEffect } from "react";
+import React, { useEffect, forwardRef, useLayoutEffect } from "react";
 import { VariableSizeList } from "react-window";
-import Cache from "./cache";
 import debounce from "lodash.debounce";
+
+import useShareForwardedRef from "./utils/useShareForwardRef";
+import Cache from "./cache";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
 
 /**
@@ -29,8 +31,7 @@ const DynamicList = (
   },
   ref
 ) => {
-  const localRef = useRef();
-  const listRef = ref || localRef;
+  const listRef = useShareForwardedRef(ref);
   const containerResizeDeps = [];
 
   if (recalculateItemsOnResize.width) {
