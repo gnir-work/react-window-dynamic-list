@@ -83,8 +83,7 @@ Currently there are two caching modes:
 
 3. All of the styling regarding the items **must** be `inline` or not affected by location in the `DOM`.
 
-4. Changes to the list's scrollbar, especially the width, should also effect the measurement container div.
-
+4. Changes to the list's scrollbar, especially the width, should also effect the measurement container div.  
    Since we pre render the items in order to measure them the size of the scrollbar is important in the pre rendered item as well. This can be achieved in the following ways:
 
    1. Make sure all of the scrollbars in the application are styled the same
