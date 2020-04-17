@@ -39,7 +39,8 @@
     "bump": "bump --commit --tag --push"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
     "@jsdevtools/version-bump-prompt": "^6.0.3",
