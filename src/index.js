@@ -5,6 +5,7 @@ import debounce from "lodash.debounce";
 import useShareForwardedRef from "./utils/useShareForwardRef";
 import Cache from "./cache";
 import measureElement, { destroyMeasureLayer } from "./asyncMeasurer";
+import { defaultMeasurementContainer } from "./defaultMeasurementContainer";
 
 /**
  * Create the dynamic list's cache object.
@@ -24,9 +25,9 @@ const DynamicList = (
     width,
     cache,
     lazyMeasurement = true,
-    onRefSet = () => {},
-    layout = "vertical",
     recalculateItemsOnResize = { width: true, height: true },
+    measurementContainerElement = defaultMeasurementContainer,
+    debug = false,
     ...variableSizeListProps
   },
   ref
@@ -46,17 +47,21 @@ const DynamicList = (
    * @param {number} index The index of the item in the data array.
    */
   const measureIndex = index => {
-    const WrappedItem = (
-      <div style={{ width, height, overflowY: "auto" }}>
-        <div
-          id="item-container"
-          style={{ overflow: "auto", overflowY: "scroll" }}
-        >
-          {children({ index })}
-        </div>
+    const ItemContainer = (
+      <div id="item-container" style={{ overflow: "auto" }}>
+        {children({ index })}
       </div>
     );
-    const { height: measuredHeight } = measureElement(WrappedItem);
+
+    const MeasurementContainer = measurementContainerElement({
+      style: { width, height, overflowY: "scroll" },
+      children: ItemContainer
+    });
+
+    const { height: measuredHeight } = measureElement(
+      MeasurementContainer,
+      debug
+    );
     return measuredHeight;
   };
 
@@ -130,7 +135,7 @@ const DynamicList = (
 
   return (
     <VariableSizeList
-      layout={layout}
+      layout="vertical"
       ref={listRef}
       itemSize={itemSize}
       height={height}
