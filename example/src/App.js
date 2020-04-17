@@ -55,7 +55,7 @@ const App = () => {
       <content>
         <div className="filter-container">
           <div className="row">
-          <label> Text Filter: </label>
+            <label> Text Filter: </label>
             <Input
               value={filter}
               onChange={handleFilterChange}
@@ -80,7 +80,6 @@ const App = () => {
               Toggle list{" "}
             </Button>
           </div>
-          
         </div>
         <div></div>
         <ResizableBox width={600} height={500} className="resizable-container">

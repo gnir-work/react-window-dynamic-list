@@ -27,7 +27,7 @@ const DynamicList = (
     lazyMeasurement = true,
     recalculateItemsOnResize = { width: true, height: true },
     measurementContainerElement = defaultMeasurementContainer,
-    debug = true,
+    debug = false,
     ...variableSizeListProps
   },
   ref
