@@ -153,12 +153,8 @@ const DynamicList = (
   const itemSize = index => {
     const { id } = data[index];
 
-    // If measure method is a function, return value of function instead
-    const method = measurementMethod(id);
-    if (typeof method === 'function') {
-      return method();
-    }
-    // If measure method is a value, return value instead
+    const method = measurementMethod(id, listWidth);
+    // If measure method returns a height value, return this value instead
     if (typeof method === 'number') {
       return method;
     }
