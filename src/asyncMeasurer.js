@@ -6,7 +6,7 @@
  * Warning: Render methods should be a pure function of props and state;
  * triggering nested component updates from render is not allowed. If necessary, trigger nested updates in componentDidUpdate.
  */
-import { renderToString } from 'react-dom/server';
+import {renderToString} from 'react-dom/server';
 
 const measureLayerStyle = {
   display: 'inline-block',
@@ -52,7 +52,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
     let breakpoint = breakpoints.find(breakpoint => breakpoint.width === width);
     if (breakpoint === undefined) {
       measureLayer.style.width = width + 'px';
-      breakpoint = { width: width, height: measureLayer.firstElementChild.offsetHeight };
+      breakpoint = {width: width, height: measureLayer.firstElementChild.offsetHeight};
       breakpoints.push(breakpoint);
     }
     return breakpoint.height;
@@ -87,13 +87,15 @@ const measureElement = (element, measureLayer, ranges, debug) => {
     });
 
   // Removes the element from the document
-  measureLayer.innerHTML = '';
+  if (!debug) {
+    container.innerHTML = "";
+  }
 
   // Reduce breakpoints to only unique heights
   let currentHeight = 0;
   const reduced = [];
   breakpoints
-    .sort(({ width: a }, { width: b }) => a - b)
+    .sort(({width: a}, {width: b}) => a - b)
     .forEach(breakpoint => {
       if (breakpoint.height !== currentHeight) {
         reduced.push(breakpoint);
