@@ -1,4 +1,12 @@
-import ReactDOM from "react-dom";
+/**
+ * We are using reactDom.browserServer.renderToString and not reactDom.render in order to
+ * allow us to measure the elements from a different components render function.
+ * If you call reactDom.render from another components render function react will crash with the following
+ * error:
+ * Warning: Render methods should be a pure function of props and state;
+ * triggering nested component updates from render is not allowed. If necessary, trigger nested updates in componentDidUpdate.
+ */
+import { renderToString } from "react-dom/server";
 
 const containerStyle = {
   display: "inline-block",
@@ -10,10 +18,12 @@ const containerStyle = {
 /**
  * Creates the hidden div appended to the document body
  */
-export const createMeasureLayer = () => {
+export const createMeasureLayer = debug => {
   const container = document.createElement("div");
   container.setAttribute("id", "measure-layer");
-  container.style = containerStyle;
+  if (!debug) {
+    container.style = containerStyle;
+  }
   document.body.appendChild(container);
   return container;
 };
@@ -32,12 +42,12 @@ export const destroyMeasureLayer = () => {
 /**
  * Measure an element by temporary rendering it.
  */
-const measureElement = element => {
+const measureElement = (element, debug) => {
   const container =
-    document.querySelector("#measure-layer") || createMeasureLayer();
+    document.querySelector("#measure-layer") || createMeasureLayer(debug);
 
   // Renders the React element into the hidden div
-  ReactDOM.render(element, container);
+  container.innerHTML = renderToString(element);
 
   // Gets the element size
   const child = container.querySelector("#item-container");
@@ -45,7 +55,9 @@ const measureElement = element => {
   const width = child.offsetWidth;
 
   // Removes the element from the document
-  ReactDOM.unmountComponentAtNode(container);
+  if (!debug) {
+    container.innerHTML = "";
+  }
 
   return { height, width };
 };

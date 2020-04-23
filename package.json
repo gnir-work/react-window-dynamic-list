@@ -1,6 +1,6 @@
 {
   "name": "react-window-dynamic-list",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A naive approach for virtualizing a list with dynamically sized items",
   "keywords": [
     "react",
@@ -39,7 +39,8 @@
     "bump": "bump --commit --tag --push"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
     "@jsdevtools/version-bump-prompt": "^6.0.3",

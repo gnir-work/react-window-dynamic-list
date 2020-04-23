@@ -2,12 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 
 import DynamicList, { createCache } from "react-window-dynamic-list";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { ResizableBox } from "react-resizable";
 
 import { generateCommands, generateCommand } from "./utils";
 import { Input, InputNumber, Button } from "antd";
 
-import "react-resizable/css/styles.css";
 import "antd/dist/antd.compact.min.css";
 import "./App.css";
 
@@ -55,7 +53,7 @@ const App = () => {
       <content>
         <div className="filter-container">
           <div className="row">
-          <label> Text Filter: </label>
+            <label> Text Filter: </label>
             <Input
               value={filter}
               onChange={handleFilterChange}
@@ -80,40 +78,36 @@ const App = () => {
               Toggle list{" "}
             </Button>
           </div>
-          
         </div>
-        <div></div>
-        <ResizableBox width={600} height={500} className="resizable-container">
-          <div className="dynamic-list-container">
-            <AutoSizer>
-              {({ height, width }) =>
-                shouldShowList && (
-                  <DynamicList
-                    cache={cache}
-                    ref={dynamicListRef}
-                    data={filteredCommands}
-                    width={width}
-                    height={height}
-                  >
-                    {({ index, style }) => (
-                      <div style={style}>
-                        <h3> Row - {index} </h3>
-                        <pre
-                          style={{
-                            whiteSpace: "inherit",
-                            marginBottom: "2em"
-                          }}
-                        >
-                          {filteredCommands[index].output}
-                        </pre>{" "}
-                      </div>
-                    )}
-                  </DynamicList>
-                )
-              }
-            </AutoSizer>
-          </div>
-        </ResizableBox>
+        <div className="dynamic-list-container">
+          <AutoSizer>
+            {({ height, width }) =>
+              shouldShowList && (
+                <DynamicList
+                  cache={cache}
+                  ref={dynamicListRef}
+                  data={filteredCommands}
+                  width={width}
+                  height={height}
+                >
+                  {({ index, style }) => (
+                    <div style={style}>
+                      <h3> Row - {index} </h3>
+                      <pre
+                        style={{
+                          whiteSpace: "inherit",
+                          marginBottom: "2em"
+                        }}
+                      >
+                        {filteredCommands[index].output}
+                      </pre>{" "}
+                    </div>
+                  )}
+                </DynamicList>
+              )
+            }
+          </AutoSizer>
+        </div>
       </content>
     </div>
   );

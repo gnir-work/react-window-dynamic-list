@@ -30,7 +30,7 @@ Yep. its that simple :satisfied:
 
 ## API
 
-The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with some small changes and additions.
+The API is the same as [VariableSizeList](https://react-window.now.sh/#/api/VariableSizeList) with some small changes and additions.
 
 #### Changes
 
@@ -41,10 +41,12 @@ The api is the same as [VariableSizeList](https://react-window.now.sh/#/api/Vari
 
 | Property                | Type     | Required? |             Default             | Description                                                                                                                                                  |
 | :---------------------- | :------- | :-------: | :-----------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data                    | Object[] |     ✓     |                                 | All of the data that will be displayed in the list. <br />Each `object` must contain an unique `id` field.<br />For example: `[{id: 1, ...}, {id: 2, ....}`] |
-| cache                   | Object   |     ✓     |                                 | The cache object which the list will use for caching the calculated sizes.<br />Check the [example](#usage) for how to create it.                            |
-| lazyMeasurement         | boolean  |           |             `true`              | Wether the application should fill the cache in the background.<br />For more information read the [caching section](#caching).                              |
-| recalculateItemsOnResize | Object   |           | `{ width: true, height: true }` | Wether the list should recalculate the items size if its own size has changed. This value __should not__ change from its initial one.                               |
+| data                    | `Object[]` |     ✓     |                                 | All of the data that will be displayed in the list. <br />Each `object` must contain an unique `id` field.<br />For example: `[{id: 1, ...}, {id: 2, ....}`] |
+| cache                   | `Object` |     ✓     |                                 | The cache object which the list will use for caching the calculated sizes.<br />Check the [example](#usage) for how to create it.                            |
+| lazyMeasurement         | `boolean` |           |             `true`              | Whether the application should fill the cache in the background.<br />For more information read the [caching section](#caching).                       |
+| recalculateItemsOnResize | `Object` |           | `{ width: false, height: false }` | Whether the list should recalculate the items size if its own size has changed. This value __should not__ change from its initial one.<br/>Currently the feature is supported but far from perfect, therefore it is disabled by default. |
+| measurementContainerElement | `Function` |           | `({style, children}) => ReactNode` | A custom container element in which the elements will be rendered for measuring. Especially useful for changing the [scrollbar width](#warning-requirements-and-limitations-warning). <br/>You **must** pass the `style` prop to your element. |
+| debug | `boolean` |           | `false` | Whether the measurement layer should be visible, useful for debugging a custom `measurementContainerElement` |
 
 ## Implementations details
 
@@ -74,11 +76,18 @@ Currently there are two caching modes:
 ## :warning: Requirements and Limitations :warning:
 
 1. Your data doesn't change its size.
+   
    - Your items size must be determined on mount (No `ajax` or images).
-2. Currently only supports vertical layout. (didn't have time to implement support for horizontal)
+   
+2. Currently only supports vertical layout. (didn't have time to implement support for horizontal).
+
 3. All of the styling regarding the items **must** be `inline` or not affected by location in the `DOM`.
-4. Changes to the list's scrollbar, especially the width, should effect all of the scrollbars in the application.
-   - Since we pre render the items in order to measure them the size of the scrollbar is important in the pre rendered item as well.
+
+4. Changes to the list's scrollbar, especially the width, should also effect the measurement container div.  
+   Since we pre render the items in order to measure them the size of the scrollbar is important in the pre rendered item as well. This can be achieved in the following ways:
+
+   1. Make sure all of the scrollbars in the application are styled the same
+   2. Pass a custom measurement container element via the `measurementContainerElement` prop.
 
 ## License
 
