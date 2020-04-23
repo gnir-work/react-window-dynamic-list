@@ -6,60 +6,102 @@
  * Warning: Render methods should be a pure function of props and state;
  * triggering nested component updates from render is not allowed. If necessary, trigger nested updates in componentDidUpdate.
  */
-import { renderToString } from "react-dom/server";
+import { renderToString } from 'react-dom/server';
 
-const containerStyle = {
-  display: "inline-block",
-  position: "absolute",
-  visibility: "hidden",
-  zIndex: -1
+const measureLayerStyle = {
+  display: 'inline-block',
+  position: 'absolute',
+  top: '-9999px',
+  left: '-9999px',
+  visibility: 'hidden',
+  zIndex: -1,
 };
 
 /**
  * Creates the hidden div appended to the document body
  */
-export const createMeasureLayer = debug => {
-  const container = document.createElement("div");
-  container.setAttribute("id", "measure-layer");
-  if (!debug) {
-    container.style = containerStyle;
-  }
-  document.body.appendChild(container);
-  return container;
+export const createMeasureLayer = () => {
+  const measureLayer = document.createElement('div');
+  Object
+    .entries(measureLayerStyle)
+    .forEach(([property, value]) => measureLayer.style[property] = value);
+  document.body.appendChild(measureLayer);
+  return measureLayer;
 };
 
 /**
  * Destroy the measuring layer.
  * Should be called when the dynamic list is unmounted.
  */
-export const destroyMeasureLayer = () => {
-  const container = document.querySelector("#measure-layer");
-  if (container) {
-    container.parentNode.removeChild(container);
+export const destroyMeasureLayer = (measureLayer) => {
+  if (measureLayer) {
+    document.body.removeChild(measureLayer);
+    console.log(10);
   }
 };
 
 /**
  * Measure an element by temporary rendering it.
  */
-const measureElement = (element, debug) => {
-  const container =
-    document.querySelector("#measure-layer") || createMeasureLayer(debug);
+const measureElement = (element, measureLayer, ranges, debug) => {
+  // Breakpoints with corresponding heights calculated from measure ranges
+  const breakpoints = [];
 
-  // Renders the React element into the hidden div
-  container.innerHTML = renderToString(element);
+  // Measure height for width
+  const measureHeightForWidth = (width) => {
+    let breakpoint = breakpoints.find(breakpoint => breakpoint.width === width);
+    if (breakpoint === undefined) {
+      measureLayer.style.width = width + 'px';
+      breakpoint = { width: width, height: measureLayer.firstElementChild.offsetHeight };
+      breakpoints.push(breakpoint);
+    }
+    return breakpoint.height;
+  };
 
-  // Gets the element size
-  const child = container.querySelector("#item-container");
-  const height = child.offsetHeight;
-  const width = child.offsetWidth;
+  // Measure heights inside width range
+  const measureHeightsForWidthRange = ([min, max]) => {
+    const minHeight = measureHeightForWidth(min);
+    if (min === max || max === undefined) {
+      return; // If the range is a single value return
+    }
+    const maxHeight = measureHeightForWidth(max);
+    if (minHeight === maxHeight) {
+      return; // If the height difference is 0, assume all heights inside the range are the same and return
+    }
+
+    const middle = min + Math.round((max - min) / 2);
+    if (middle > min + 1) measureHeightsForWidthRange([min, middle]);
+    if (middle < max - 1) measureHeightsForWidthRange([middle, max]);
+    if (middle === max - 1) measureHeightForWidth(middle);
+  };
+
+  // Get breakpoints for all width ranges/values
+  ranges
+    .map(value => Array.isArray(value) ? value : [value, value]) // Convert values into ranges
+    .forEach(([min, max]) => {
+      // Renders the React element into the hidden div
+      measureLayer.innerHTML = renderToString(element(max));
+
+      // Measures the above React element for given width range
+      measureHeightsForWidthRange([min, max]);
+    });
 
   // Removes the element from the document
-  if (!debug) {
-    container.innerHTML = "";
-  }
+  measureLayer.innerHTML = '';
 
-  return { height, width };
+  // Reduce breakpoints to only unique heights
+  let currentHeight = 0;
+  const reduced = [];
+  breakpoints
+    .sort(({ width: a }, { width: b }) => a - b)
+    .forEach(breakpoint => {
+      if (breakpoint.height !== currentHeight) {
+        reduced.push(breakpoint);
+        currentHeight = breakpoint.height;
+      }
+    });
+
+  return reduced;
 };
 
 export default measureElement;
