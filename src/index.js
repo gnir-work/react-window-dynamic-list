@@ -6,6 +6,7 @@ import Cache from './cache';
 import measureElement, { createMeasureLayer, destroyMeasureLayer } from './asyncMeasurer';
 import { defaultMeasurementContainer } from './defaultMeasurementContainer';
 import createBackgroundTaskProcessor from './utils/backgroundTasks';
+import useLazyInstance from './utils/useLazyInstance';
 
 /**
  * Create the dynamic list's cache object.
@@ -37,29 +38,26 @@ const DynamicList = (
   const [listWidth, setListWidth] = useState(width);
 
   /**
-   * Create measure layer on mount and destroy on unmount
+   * Lazy measure layer instance
    */
-  const { current: measureLayer } = useRef(createMeasureLayer());
-  useEffect(() => {
-    return () => destroyMeasureLayer(measureLayer);
-  }, []);
+  const getMeasureLayer = useLazyInstance(createMeasureLayer, layer => destroyMeasureLayer(layer));
 
   /**
-   * Background task processor instance
+   * Lazy background task processor instance
    */
-  const { current: backgroundTaskProcessor } = useRef(createBackgroundTaskProcessor());
+  const getBackgroundTaskProcessor = useLazyInstance(createBackgroundTaskProcessor, processor => processor.pause())
 
   /**
    * Only resize window if all items have actually been measured in the background else delay the resize
    * until this is done, double check if the resize hasn't already happened in the callback
    */
   useLayoutEffect(() => {
-    backgroundTaskProcessor.setCallback(() => {
+    getBackgroundTaskProcessor().setCallback(() => {
       if (listWidth !== width) {
         setListWidth(width);
       }
     });
-    backgroundTaskProcessor.resume();
+    getBackgroundTaskProcessor().resume();
   }, [listWidth, width]);
 
   /**
@@ -73,18 +71,18 @@ const DynamicList = (
       style: { overflowY: 'scroll' },
       children: (
         <div style={{ overflow: 'auto' }}>
-          {children({ index: data.findIndex(item => item.id === id), itemWidth })}
+          {children({ index, itemWidth })}
         </div>
       ),
     });
 
     // Get measure method for id
-    const ranges = measurementMethod(id);
+    const ranges = measurementMethod(index, listWidth);
 
     // Calculate height for current width
     cache.values[id] = measureElement(
       MeasurementContainer,
-      measureLayer,
+      getMeasureLayer(),
       [listWidth],
       debug,
     );
@@ -95,12 +93,12 @@ const DynamicList = (
     }
 
     // Calculate height for all width ranges
-    backgroundTaskProcessor.add({
+    getBackgroundTaskProcessor().add({
       id,
       task: () => {
         cache.values[id] = measureElement(
           MeasurementContainer,
-          measureLayer,
+          getMeasureLayer(),
           ranges,
           debug,
         );
@@ -116,7 +114,7 @@ const DynamicList = (
   const lazyCacheFill = () => {
     data.forEach(({ id }, index) => {
       if (!cache.values[id]) {
-        backgroundTaskProcessor.add({ id, task: () => itemSize(index) });
+        getBackgroundTaskProcessor().add({ id, task: () => itemSize(index) });
       }
     });
   };
@@ -153,15 +151,20 @@ const DynamicList = (
   const itemSize = index => {
     const { id } = data[index];
 
-    const method = measurementMethod(id, listWidth);
+    const method = measurementMethod(index, listWidth);
     // If measure method returns a height value, return this value instead
     if (typeof method === 'number') {
       return method;
     }
 
     // If the item hasn't been measured before, measure it
-    if (!cache.values[id]) {
+    if (!cache.values[id] || !cache.values[id].length) {
       measureIndex(index);
+    }
+
+    // If there is still no measurement available, give up and return zero height
+    if (!cache.values[id] || !cache.values[id].length) {
+      return 0;
     }
 
     // Get size of item from breakpoints
@@ -178,10 +181,10 @@ const DynamicList = (
 
     // Stop the background tasks to guarantee smooth scroll and start
     // the background tasks again 100ms after the user stop scrolling
-    backgroundTaskProcessor.pause();
+    getBackgroundTaskProcessor().pause();
     clearTimeout(scrollIdleTimeout.current);
     scrollIdleTimeout.current = setTimeout(() => {
-      backgroundTaskProcessor.resume();
+      getBackgroundTaskProcessor().resume();
     }, 100);
   };
 
@@ -196,7 +199,7 @@ const DynamicList = (
       itemCount={data.length}
       {...variableSizeListProps}
     >
-      {childrenProp => children({ ...childrenProp, itemWidth: listWidth })}
+      {({ index, ...childrenProps }) => children({ ...childrenProps, index, itemWidth: listWidth })}
     </VariableSizeList>
   );
 };

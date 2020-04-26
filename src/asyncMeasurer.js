@@ -1,12 +1,4 @@
-/**
- * We are using reactDom.browserServer.renderToString and not reactDom.render in order to
- * allow us to measure the elements from a different components render function.
- * If you call reactDom.render from another components render function react will crash with the following
- * error:
- * Warning: Render methods should be a pure function of props and state;
- * triggering nested component updates from render is not allowed. If necessary, trigger nested updates in componentDidUpdate.
- */
-import {renderToString} from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 
 const measureLayerStyle = {
   display: 'inline-block',
@@ -36,7 +28,6 @@ export const createMeasureLayer = () => {
 export const destroyMeasureLayer = (measureLayer) => {
   if (measureLayer) {
     document.body.removeChild(measureLayer);
-    console.log(10);
   }
 };
 
@@ -52,7 +43,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
     let breakpoint = breakpoints.find(breakpoint => breakpoint.width === width);
     if (breakpoint === undefined) {
       measureLayer.style.width = width + 'px';
-      breakpoint = {width: width, height: measureLayer.firstElementChild.offsetHeight};
+      breakpoint = { width: width, height: measureLayer.firstElementChild.offsetHeight };
       breakpoints.push(breakpoint);
     }
     return breakpoint.height;
@@ -88,14 +79,14 @@ const measureElement = (element, measureLayer, ranges, debug) => {
 
   // Removes the element from the document
   if (!debug) {
-    container.innerHTML = "";
+    measureLayer.innerHTML = '';
   }
 
   // Reduce breakpoints to only unique heights
   let currentHeight = 0;
   const reduced = [];
   breakpoints
-    .sort(({width: a}, {width: b}) => a - b)
+    .sort(({ width: a }, { width: b }) => a - b)
     .forEach(breakpoint => {
       if (breakpoint.height !== currentHeight) {
         reduced.push(breakpoint);
