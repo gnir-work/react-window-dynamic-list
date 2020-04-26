@@ -173,21 +173,12 @@ const DynamicList = (
     }
 
     // If the item hasn't been measured before, measure it
-    if (!cache.values[id] || !cache.values[id].length) {
+    if (!cache.getSize(id, width)) {
       measureIndex(index);
     }
 
-    // If there is still no measurement available, give up and return zero height
-    if (!cache.values[id] || !cache.values[id].length) {
-      return 0;
-    }
-
     // Get size of item from breakpoints
-    return cache.values[id].reduce(
-      (value, breakpoint) =>
-        breakpoint.width <= width ? breakpoint.height : value,
-      cache.values[id].slice(-1)[0].height
-    );
+    return cache.getSize(id, width);
   };
 
   const scrollIdleTimeout = useRef(null);
