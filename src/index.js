@@ -1,12 +1,21 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { VariableSizeList } from 'react-window';
+import React, {
+  forwardRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { VariableSizeList } from "react-window";
 
-import useShareForwardedRef from './utils/useShareForwardRef';
-import Cache from './cache';
-import measureElement, { createMeasureLayer, destroyMeasureLayer } from './asyncMeasurer';
-import { defaultMeasurementContainer } from './defaultMeasurementContainer';
-import createBackgroundTaskProcessor from './utils/backgroundTasks';
-import useLazyInstance from './utils/useLazyInstance';
+import useShareForwardedRef from "./utils/useShareForwardRef";
+import Cache from "./cache";
+import measureElement, {
+  createMeasureLayer,
+  destroyMeasureLayer,
+} from "./asyncMeasurer";
+import { defaultMeasurementContainer } from "./defaultMeasurementContainer";
+import createBackgroundTaskProcessor from "./utils/backgroundTasks";
+import useLazyInstance from "./utils/useLazyInstance";
 
 /**
  * Create the dynamic list's cache object.
@@ -32,7 +41,7 @@ const DynamicList = (
     debug = false,
     ...variableSizeListProps
   },
-  ref,
+  ref
 ) => {
   const listRef = useShareForwardedRef(ref);
   const [listWidth, setListWidth] = useState(width);
@@ -40,12 +49,17 @@ const DynamicList = (
   /**
    * Lazy measure layer instance
    */
-  const getMeasureLayer = useLazyInstance(createMeasureLayer, layer => destroyMeasureLayer(layer));
+  const getMeasureLayer = useLazyInstance(createMeasureLayer, (layer) =>
+    destroyMeasureLayer(layer)
+  );
 
   /**
    * Lazy background task processor instance
    */
-  const getBackgroundTaskProcessor = useLazyInstance(createBackgroundTaskProcessor, processor => processor.pause())
+  const getBackgroundTaskProcessor = useLazyInstance(
+    createBackgroundTaskProcessor,
+    (processor) => processor.pause()
+  );
 
   /**
    * Only resize window if all items have actually been measured in the background else delay the resize
@@ -64,17 +78,18 @@ const DynamicList = (
    * Measure a specific item.
    * @param {number} index The index of the item in the data array.
    */
-  const measureIndex = index => {
+  const measureIndex = (index) => {
     const { id } = data[index];
 
-    const MeasurementContainer = itemWidth => measurementContainerElement({
-      style: { overflowY: 'scroll' },
-      children: (
-        <div style={{ overflow: 'auto' }}>
-          {children({ index, itemWidth })}
-        </div>
-      ),
-    });
+    const MeasurementContainer = (itemWidth) =>
+      measurementContainerElement({
+        style: { overflowY: "scroll" },
+        children: (
+          <div style={{ overflow: "auto" }}>
+            {children({ index, itemWidth })}
+          </div>
+        ),
+      });
 
     // Get measure method for id
     const ranges = measurementMethod(index, listWidth);
@@ -84,7 +99,7 @@ const DynamicList = (
       MeasurementContainer,
       getMeasureLayer(),
       [listWidth],
-      debug,
+      debug
     );
 
     // If there are no more ranges to calculate, stop here and return
@@ -100,7 +115,7 @@ const DynamicList = (
           MeasurementContainer,
           getMeasureLayer(),
           ranges,
-          debug,
+          debug
         );
       },
     });
@@ -148,12 +163,12 @@ const DynamicList = (
    * Get the size of the item.
    * @param {number} index The index of the item in the data array.
    */
-  const itemSize = index => {
+  const itemSize = (index) => {
     const { id } = data[index];
 
     const method = measurementMethod(index, listWidth);
     // If measure method returns a height value, return this value instead
-    if (typeof method === 'number') {
+    if (typeof method === "number") {
       return method;
     }
 
@@ -168,12 +183,15 @@ const DynamicList = (
     }
 
     // Get size of item from breakpoints
-    return cache.values[id].reduce((value, breakpoint) =>
-      breakpoint.width <= width ? breakpoint.height : value, cache.values[id].slice(-1)[0].height);
+    return cache.values[id].reduce(
+      (value, breakpoint) =>
+        breakpoint.width <= width ? breakpoint.height : value,
+      cache.values[id].slice(-1)[0].height
+    );
   };
 
   const scrollIdleTimeout = useRef(null);
-  const handleScroll = e => {
+  const handleScroll = (e) => {
     // Call scroll prop if available
     if (onScroll) {
       onScroll(e);
@@ -199,7 +217,9 @@ const DynamicList = (
       itemCount={data.length}
       {...variableSizeListProps}
     >
-      {({ index, ...childrenProps }) => children({ ...childrenProps, index, itemWidth: listWidth })}
+      {({ index, ...childrenProps }) =>
+        children({ ...childrenProps, index, itemWidth: listWidth })
+      }
     </VariableSizeList>
   );
 };

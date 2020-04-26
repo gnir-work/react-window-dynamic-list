@@ -1,11 +1,11 @@
-import { renderToString } from 'react-dom/server';
+import { renderToString } from "react-dom/server";
 
 const measureLayerStyle = {
-  display: 'inline-block',
-  position: 'absolute',
-  top: '-9999px',
-  left: '-9999px',
-  visibility: 'hidden',
+  display: "inline-block",
+  position: "absolute",
+  top: "-9999px",
+  left: "-9999px",
+  visibility: "hidden",
   zIndex: -1,
 };
 
@@ -13,10 +13,10 @@ const measureLayerStyle = {
  * Creates the hidden div appended to the document body
  */
 export const createMeasureLayer = () => {
-  const measureLayer = document.createElement('div');
-  Object
-    .entries(measureLayerStyle)
-    .forEach(([property, value]) => measureLayer.style[property] = value);
+  const measureLayer = document.createElement("div");
+  Object.entries(measureLayerStyle).forEach(
+    ([property, value]) => (measureLayer.style[property] = value)
+  );
   document.body.appendChild(measureLayer);
   return measureLayer;
 };
@@ -40,10 +40,15 @@ const measureElement = (element, measureLayer, ranges, debug) => {
 
   // Measure height for width
   const measureHeightForWidth = (width) => {
-    let breakpoint = breakpoints.find(breakpoint => breakpoint.width === width);
+    let breakpoint = breakpoints.find(
+      (breakpoint) => breakpoint.width === width
+    );
     if (breakpoint === undefined) {
-      measureLayer.style.width = width + 'px';
-      breakpoint = { width: width, height: measureLayer.firstElementChild.offsetHeight };
+      measureLayer.style.width = width + "px";
+      breakpoint = {
+        width: width,
+        height: measureLayer.firstElementChild.offsetHeight,
+      };
       breakpoints.push(breakpoint);
     }
     return breakpoint.height;
@@ -68,7 +73,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
 
   // Get breakpoints for all width ranges/values
   ranges
-    .map(value => Array.isArray(value) ? value : [value, value]) // Convert values into ranges
+    .map((value) => (Array.isArray(value) ? value : [value, value])) // Convert values into ranges
     .forEach(([min, max]) => {
       // Renders the React element into the hidden div
       measureLayer.innerHTML = renderToString(element(max));
@@ -79,7 +84,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
 
   // Removes the element from the document
   if (!debug) {
-    measureLayer.innerHTML = '';
+    measureLayer.innerHTML = "";
   }
 
   // Reduce breakpoints to only unique heights
@@ -87,7 +92,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
   const reduced = [];
   breakpoints
     .sort(({ width: a }, { width: b }) => a - b)
-    .forEach(breakpoint => {
+    .forEach((breakpoint) => {
       if (breakpoint.height !== currentHeight) {
         reduced.push(breakpoint);
         currentHeight = breakpoint.height;

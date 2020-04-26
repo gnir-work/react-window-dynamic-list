@@ -20,7 +20,7 @@ const createBackgroundTaskProcessor = () => {
   };
 
   const stop = () => {
-    if(callback) {
+    if (callback) {
       callback();
     }
     if (!isProcessing()) {
@@ -62,7 +62,7 @@ const createBackgroundTaskProcessor = () => {
     add({ id, task });
   };
 
-  const setCallback = cb => callback = cb;
+  const setCallback = (cb) => (callback = cb);
 
   return { pause, resume, add, remove, replace, setCallback };
 };
