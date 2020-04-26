@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
  *
  * https://gist.github.com/pie6k/b4717f392d773a71f67e110b42927fea
  */
-const useShareForwardedRef = (forwardedRef) => {
+const useShareForwardedRef = forwardedRef => {
   // final ref that will share value with forward ref. this is the one we will attach to components
   const innerRef = useRef(null);
 

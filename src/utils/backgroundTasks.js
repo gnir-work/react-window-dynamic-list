@@ -53,7 +53,7 @@ const createBackgroundTaskProcessor = () => {
     }
   };
 
-  const remove = (id) => {
+  const remove = id => {
     delete tasks[id]; // Remove existing task if it exists
   };
 
@@ -62,7 +62,7 @@ const createBackgroundTaskProcessor = () => {
     add({ id, task });
   };
 
-  const setCallback = (cb) => (callback = cb);
+  const setCallback = cb => (callback = cb);
 
   return { pause, resume, add, remove, replace, setCallback };
 };

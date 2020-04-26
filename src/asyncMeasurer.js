@@ -6,7 +6,7 @@ const measureLayerStyle = {
   top: "-9999px",
   left: "-9999px",
   visibility: "hidden",
-  zIndex: -1,
+  zIndex: -1
 };
 
 /**
@@ -25,7 +25,7 @@ export const createMeasureLayer = () => {
  * Destroy the measuring layer.
  * Should be called when the dynamic list is unmounted.
  */
-export const destroyMeasureLayer = (measureLayer) => {
+export const destroyMeasureLayer = measureLayer => {
   if (measureLayer) {
     document.body.removeChild(measureLayer);
   }
@@ -39,15 +39,13 @@ const measureElement = (element, measureLayer, ranges, debug) => {
   const breakpoints = [];
 
   // Measure height for width
-  const measureHeightForWidth = (width) => {
-    let breakpoint = breakpoints.find(
-      (breakpoint) => breakpoint.width === width
-    );
+  const measureHeightForWidth = width => {
+    let breakpoint = breakpoints.find(breakpoint => breakpoint.width === width);
     if (breakpoint === undefined) {
       measureLayer.style.width = width + "px";
       breakpoint = {
         width: width,
-        height: measureLayer.firstElementChild.offsetHeight,
+        height: measureLayer.firstElementChild.offsetHeight
       };
       breakpoints.push(breakpoint);
     }
@@ -73,7 +71,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
 
   // Get breakpoints for all width ranges/values
   ranges
-    .map((value) => (Array.isArray(value) ? value : [value, value])) // Convert values into ranges
+    .map(value => (Array.isArray(value) ? value : [value, value])) // Convert values into ranges
     .forEach(([min, max]) => {
       // Renders the React element into the hidden div
       measureLayer.innerHTML = renderToString(element(max));
@@ -92,7 +90,7 @@ const measureElement = (element, measureLayer, ranges, debug) => {
   const reduced = [];
   breakpoints
     .sort(({ width: a }, { width: b }) => a - b)
-    .forEach((breakpoint) => {
+    .forEach(breakpoint => {
       if (breakpoint.height !== currentHeight) {
         reduced.push(breakpoint);
         currentHeight = breakpoint.height;

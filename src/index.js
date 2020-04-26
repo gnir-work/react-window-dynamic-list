@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from "react";
 import { VariableSizeList } from "react-window";
 
@@ -11,7 +11,7 @@ import useShareForwardedRef from "./utils/useShareForwardRef";
 import Cache from "./cache";
 import measureElement, {
   createMeasureLayer,
-  destroyMeasureLayer,
+  destroyMeasureLayer
 } from "./asyncMeasurer";
 import { defaultMeasurementContainer } from "./defaultMeasurementContainer";
 import createBackgroundTaskProcessor from "./utils/backgroundTasks";
@@ -49,7 +49,7 @@ const DynamicList = (
   /**
    * Lazy measure layer instance
    */
-  const getMeasureLayer = useLazyInstance(createMeasureLayer, (layer) =>
+  const getMeasureLayer = useLazyInstance(createMeasureLayer, layer =>
     destroyMeasureLayer(layer)
   );
 
@@ -58,7 +58,7 @@ const DynamicList = (
    */
   const getBackgroundTaskProcessor = useLazyInstance(
     createBackgroundTaskProcessor,
-    (processor) => processor.pause()
+    processor => processor.pause()
   );
 
   /**
@@ -78,17 +78,17 @@ const DynamicList = (
    * Measure a specific item.
    * @param {number} index The index of the item in the data array.
    */
-  const measureIndex = (index) => {
+  const measureIndex = index => {
     const { id } = data[index];
 
-    const MeasurementContainer = (itemWidth) =>
+    const MeasurementContainer = itemWidth =>
       measurementContainerElement({
         style: { overflowY: "scroll" },
         children: (
           <div style={{ overflow: "auto" }}>
             {children({ index, itemWidth })}
           </div>
-        ),
+        )
       });
 
     // Get measure method for id
@@ -117,7 +117,7 @@ const DynamicList = (
           ranges,
           debug
         );
-      },
+      }
     });
   };
 
@@ -163,7 +163,7 @@ const DynamicList = (
    * Get the size of the item.
    * @param {number} index The index of the item in the data array.
    */
-  const itemSize = (index) => {
+  const itemSize = index => {
     const { id } = data[index];
 
     const method = measurementMethod(index, listWidth);
@@ -191,7 +191,7 @@ const DynamicList = (
   };
 
   const scrollIdleTimeout = useRef(null);
-  const handleScroll = (e) => {
+  const handleScroll = e => {
     // Call scroll prop if available
     if (onScroll) {
       onScroll(e);
