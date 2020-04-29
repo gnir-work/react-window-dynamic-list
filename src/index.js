@@ -87,9 +87,11 @@ const DynamicList = (
   };
 
   const handleListResize = debounce(() => {
-    cache.clearCache();
-    listRef.current.resetAfterIndex(0);
-    lazyCacheFill();
+    if (listRef.current) {
+      cache.clearCache();
+      listRef.current.resetAfterIndex(0);
+      lazyCacheFill();
+    }
   }, 50);
 
   /**
