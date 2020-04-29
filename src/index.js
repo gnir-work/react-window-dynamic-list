@@ -108,7 +108,9 @@ const DynamicList = (
    * Recalculate items size of the list size has changed.
    */
   useLayoutEffect(() => {
-    handleListResize();
+    if (containerResizeDeps.length > 0) {
+      handleListResize();
+    }
   }, containerResizeDeps);
 
   /**
