@@ -87,9 +87,11 @@ const DynamicList = (
   };
 
   const handleListResize = debounce(() => {
-    cache.clearCache();
-    listRef.current.resetAfterIndex(0);
-    lazyCacheFill();
+    if (listRef.current) {
+      cache.clearCache();
+      listRef.current.resetAfterIndex(0);
+      lazyCacheFill();
+    }
   }, 50);
 
   /**
@@ -106,7 +108,9 @@ const DynamicList = (
    * Recalculate items size of the list size has changed.
    */
   useLayoutEffect(() => {
-    handleListResize();
+    if (containerResizeDeps.length > 0) {
+      handleListResize();
+    }
   }, containerResizeDeps);
 
   /**
