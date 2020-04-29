@@ -98,12 +98,12 @@ const DynamicList = (
     cache.values[id] = measureElement(
       MeasurementContainer,
       getMeasureLayer(),
-      [listWidth],
+      [width],
       debug
     );
 
     // If there are no more ranges to calculate, stop here and return
-    if (ranges.length === 1 && ranges[0] === listWidth) {
+    if (ranges.length === 1 && ranges[0] === width) {
       return;
     }
 
@@ -147,8 +147,10 @@ const DynamicList = (
    * Recalculate items sizes when the list size has changed.
    */
   useLayoutEffect(() => {
-    listRef.current.resetAfterIndex(0);
-  }, [width, height]);
+    if (listRef.current) {
+      listRef.current.resetAfterIndex(0);
+    }
+  }, [width, height, listRef.current]);
 
   /**
    * In case the data changed we need to reassign the current size to all of the indexes.
@@ -157,7 +159,7 @@ const DynamicList = (
     if (listRef.current) {
       listRef.current.resetAfterIndex(0);
     }
-  }, [data.map(({ id }) => id).join()]);
+  }, [data.map(({ id }) => id).join(), listRef.current]);
 
   /**
    * Get the size of the item.
@@ -166,7 +168,7 @@ const DynamicList = (
   const itemSize = index => {
     const { id } = data[index];
 
-    const method = measurementMethod(index, listWidth);
+    const method = measurementMethod(index, width);
     // If measure method returns a height value, return this value instead
     if (typeof method === "number") {
       return method;
