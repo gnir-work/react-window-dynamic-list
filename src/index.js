@@ -150,7 +150,7 @@ const DynamicList = (
     if (listRef.current) {
       listRef.current.resetAfterIndex(0);
     }
-  }, [width, height, listRef.current]);
+  }, [width, height]);
 
   /**
    * In case the data changed we need to reassign the current size to all of the indexes.
@@ -159,7 +159,7 @@ const DynamicList = (
     if (listRef.current) {
       listRef.current.resetAfterIndex(0);
     }
-  }, [data.map(({ id }) => id).join(), listRef.current]);
+  }, [data.map(({ id }) => id).join()]);
 
   /**
    * Get the size of the item.
