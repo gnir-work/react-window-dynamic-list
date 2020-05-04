@@ -92,7 +92,7 @@ const DynamicList = (
       });
 
     // Get measure method for id
-    const ranges = measurementMethod(index, listWidth);
+    const ranges = measurementMethod(index);
 
     // Calculate height for current width
     cache.values[id] = measureElement(
