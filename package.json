@@ -68,7 +68,10 @@
     "dist"
   ],
   "dependencies": {
+    "@types/react": "^16.9.36",
+    "@types/react-window": "^1.8.2",
     "lodash.debounce": "^4.0.8",
     "react-window": "^1.8.5"
-  }
+  },
+  "types": "types/index.d.ts"
 }
