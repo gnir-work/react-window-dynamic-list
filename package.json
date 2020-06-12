@@ -26,7 +26,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "rm -rf ./dist && microbundle-crl --no-compress --format modern,cjs && mkdir ./dist/types && cp ./types/index.d.ts ./dist/types",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepublish": "run-s build",
     "test": "run-s test:unit test:lint test:build",
