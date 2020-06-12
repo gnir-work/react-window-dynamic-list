@@ -40,7 +40,9 @@
   },
   "peerDependencies": {
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "@types/react": "^16.0.0",
+    "@types/react-dom": "^16.0.0"
   },
   "devDependencies": {
     "@jsdevtools/version-bump-prompt": "^6.0.3",
@@ -68,7 +70,6 @@
     "dist"
   ],
   "dependencies": {
-    "@types/react": "^16.9.36",
     "@types/react-window": "^1.8.2",
     "lodash.debounce": "^4.0.8",
     "react-window": "^1.8.5"
