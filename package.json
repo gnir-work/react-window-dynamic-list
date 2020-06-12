@@ -26,7 +26,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "rm -rf ./dist && microbundle-crl --no-compress --format modern,cjs && mkdir ./dist/types && cp ./types/index.d.ts ./dist/types",
+    "build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepublish": "run-s build",
     "test": "run-s test:unit test:lint test:build",
@@ -67,7 +67,7 @@
     "react-scripts": "^3.4.1"
   },
   "files": [
-    "dist"
+    "dist", "types"
   ],
   "dependencies": {
     "@types/react-window": "^1.8.2",
