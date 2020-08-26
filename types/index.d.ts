@@ -1,4 +1,4 @@
-import { ReactNode, ReactChildren, FC, PropsWithChildren, CSSProperties } from "react";
+import { ReactNode, ReactChildren, PropsWithChildren, CSSProperties } from "react";
 import { VariableSizeListProps } from "react-window";
 
 /**
@@ -42,10 +42,10 @@ export interface DynamicListProps<K extends BasicDataType> extends Omit<Variable
  * Read the props section in the README for additional information on the added props above the basic react-window ones. 
  * Read the implementation section in the README for additional information on the general algorithm.
  */
-export default function DynamicList<K extends BasicDataType>(props: PropsWithChildren<DynamicListProps<K>>): ElementType;
+export default function DynamicList<K extends BasicDataType>(props: PropsWithChildren<DynamicListProps<K>>): JSX.Element;
 
 /**
  * A utility function for creating cache objects.
  * @param knownSizes A mapping between id and the height of the element.
  */
-export const createCache = (knownSizes?: cacheValuesType[]) => new CacheType;
+export function createCache(knownSizes?: cacheValuesType[]): CacheType;
