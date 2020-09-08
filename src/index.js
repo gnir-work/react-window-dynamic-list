@@ -21,6 +21,7 @@ const DynamicList = (
   {
     children,
     data,
+    itemData,
     height,
     width,
     cache,
@@ -49,7 +50,7 @@ const DynamicList = (
   const measureIndex = index => {
     const ItemContainer = (
       <div id="item-container" style={{ overflow: "auto" }}>
-        {children({ index })}
+        {children({ index, data:itemData[index] })}
       </div>
     );
 
@@ -145,6 +146,7 @@ const DynamicList = (
       height={height}
       width={width}
       itemCount={data.length}
+      itemData={itemData}
       {...variableSizeListProps}
     >
       {children}
