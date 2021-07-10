@@ -101,6 +101,13 @@ const DynamicList = (
     if (lazyMeasurement) {
       lazyCacheFill();
     }
+    if (listRef.current) {
+      const oldResetAfterIndex = listRef.current.resetAfterIndex;
+      listRef.current.resetAfterIndex = (index, shouldForceUpdate = true) => {
+        cache.clearCache();
+        oldResetAfterIndex(index, shouldForceUpdate);
+      };
+    }
     return destroyMeasureLayer;
   }, []);
 
