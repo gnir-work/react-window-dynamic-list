@@ -1,9 +1,4 @@
-import React, {
-  useEffect,
-  forwardRef,
-  useLayoutEffect,
-  useCallback
-} from "react";
+import React, { forwardRef, useEffect, useLayoutEffect } from "react";
 import { VariableSizeList } from "react-window";
 import debounce from "lodash.debounce";
 
@@ -84,7 +79,6 @@ const DynamicList = (
       // We use set timeout here in order to execute the measuring in a background thread.
       setTimeout(() => {
         if (!cache.values[id]) {
-          console.log(`caching ${id}`);
           const height = measureIndex(index);
 
           // Double check in case the main thread already populated this id
