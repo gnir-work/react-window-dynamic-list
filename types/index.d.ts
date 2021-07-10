@@ -21,8 +21,14 @@ export type cacheValuesType = {
  */
 export class CacheType {
   values: cacheValuesType[];
+
   constructor(initialValues: cacheValuesType);
+
   clearCache(): void;
+}
+
+export type measurementContainerElementProps = {
+  style: CSSProperties;
 }
 
 export interface DynamicListProps<K extends BasicDataType> extends Omit<VariableSizeListProps, "itemSize" | "itemCount" | "estimatedItemSize"> {
@@ -33,10 +39,11 @@ export interface DynamicListProps<K extends BasicDataType> extends Omit<Variable
     width: boolean;
     height: boolean;
   };
-  measurementContainerElement?: ComponentType<{ style: CSSProperties }>;
+  measurementContainerElement?: ComponentType<measurementContainerElementProps>;
   debug?: boolean;
   ref: MutableRefObject<VariableSizeList | undefined>;
 }
+
 
 /**
  * A virtualized list which handles item of varying sizes.
