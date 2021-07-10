@@ -75,7 +75,7 @@ const DynamicList = (
    * This could be a little tough in the site in the first seconds however it allows
    * fast jumping.
    */
-  const lazyCacheFill = useCallback(() => {
+  const lazyCacheFill = () => {
     if (!lazyMeasurement) {
       return;
     }
@@ -94,7 +94,7 @@ const DynamicList = (
         }
       }, 0);
     });
-  }, [lazyMeasurement]);
+  };
 
   const handleListResize = debounce(() => {
     if (listRef.current) {
@@ -106,10 +106,13 @@ const DynamicList = (
 
   /**
    * Initiate cache filling and handle cleanup of measurement layer.
+   * In addition cache the old implementation of the overridden functions.
    */
   useEffect(() => {
     lazyCacheFill();
-
+    if (listRef.current) {
+      listRef.current._resetAfterIndex = listRef.current.resetAfterIndex;
+    }
     return destroyMeasureLayer;
   }, []);
 
@@ -118,14 +121,16 @@ const DynamicList = (
    * info. This sharing comes at a cost - if users call VariableSizeList functions directly we cant adjust accordingly.
    * In order to inject our custom code without effecting our API we added the overriding functionality as seen bellow:
    * resetAfterIndex - Add the clearing of our cache as well as VariableSizeList cache.
+   *
+   * lazyCacheFill is deliberately not wrapped with useCallback - It isn't expensive to overwrite resetAfterIndex every
+   * render and it allows us to make sure that all of the values in lazyCacheFilter are up to date.
    */
   useEffect(() => {
     if (listRef.current) {
-      const oldResetAfterIndex = listRef.current.resetAfterIndex;
       listRef.current.resetAfterIndex = (index, shouldForceUpdate = true) => {
         cache.clearCache();
         lazyCacheFill();
-        oldResetAfterIndex(index, shouldForceUpdate);
+        listRef.current._resetAfterIndex(index, shouldForceUpdate);
       };
     }
   }, [lazyCacheFill]);
