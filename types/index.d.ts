@@ -1,5 +1,5 @@
-import {ComponentType, CSSProperties, PropsWithChildren} from "react";
-import {VariableSizeListProps} from "react-window";
+import {ComponentType, CSSProperties, PropsWithChildren, MutableRefObject} from "react";
+import {VariableSizeList, VariableSizeListProps} from "react-window";
 
 /**
  * All of the data should contain an id property that will be used
@@ -35,6 +35,7 @@ export interface DynamicListProps<K extends BasicDataType> extends Omit<Variable
   };
   measurementContainerElement?: ComponentType<{ style: CSSProperties }>;
   debug?: boolean;
+  ref: MutableRefObject<VariableSizeList | undefined>;
 }
 
 /**
