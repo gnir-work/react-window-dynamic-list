@@ -1,5 +1,5 @@
-import { ReactNode, ReactChildren, PropsWithChildren, CSSProperties } from "react";
-import { VariableSizeListProps } from "react-window";
+import {ComponentType, CSSProperties, PropsWithChildren, MutableRefObject} from "react";
+import {VariableSizeList, VariableSizeListProps} from "react-window";
 
 /**
  * All of the data should contain an id property that will be used
@@ -19,11 +19,17 @@ export type cacheValuesType = {
 /**
  * The cache object.
  */
-export class CacheType {
+declare class CacheType {
   values: cacheValuesType[];
+
   constructor(initialValues: cacheValuesType);
+
   clearCache(): void;
-} 
+}
+
+export type measurementContainerElementProps = {
+  style: CSSProperties;
+}
 
 export interface DynamicListProps<K extends BasicDataType> extends Omit<VariableSizeListProps, "itemSize" | "itemCount" | "estimatedItemSize"> {
   data: K[];
@@ -33,13 +39,15 @@ export interface DynamicListProps<K extends BasicDataType> extends Omit<Variable
     width: boolean;
     height: boolean;
   };
-  measurementContainerElement?: (style: CSSProperties, children: ReactChildren) => ReactNode;
+  measurementContainerElement?: ComponentType<measurementContainerElementProps>;
   debug?: boolean;
+  ref: MutableRefObject<VariableSizeList | undefined>;
 }
+
 
 /**
  * A virtualized list which handles item of varying sizes.
- * Read the props section in the README for additional information on the added props above the basic react-window ones. 
+ * Read the props section in the README for additional information on the added props above the basic react-window ones.
  * Read the implementation section in the README for additional information on the general algorithm.
  */
 export default function DynamicList<K extends BasicDataType>(props: PropsWithChildren<DynamicListProps<K>>): JSX.Element;
