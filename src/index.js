@@ -71,6 +71,10 @@ const DynamicList = (
    * fast jumping.
    */
   const lazyCacheFill = () => {
+    if (!lazyMeasurement) {
+      return;
+    }
+
     data.forEach(({ id }, index) => {
       // We use set timeout here in order to execute the measuring in a background thread.
       setTimeout(() => {
@@ -98,9 +102,8 @@ const DynamicList = (
    * Initiate cache filling and handle cleanup of measurement layer.
    */
   useEffect(() => {
-    if (lazyMeasurement) {
-      lazyCacheFill();
-    }
+    lazyCacheFill();
+
     if (listRef.current) {
       const oldResetAfterIndex = listRef.current.resetAfterIndex;
       listRef.current.resetAfterIndex = (index, shouldForceUpdate = true) => {
@@ -108,6 +111,7 @@ const DynamicList = (
         oldResetAfterIndex(index, shouldForceUpdate);
       };
     }
+
     return destroyMeasureLayer;
   }, []);
 
