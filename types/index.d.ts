@@ -19,7 +19,7 @@ export type cacheValuesType = {
 /**
  * The cache object.
  */
-export class CacheType {
+declare class CacheType {
   values: cacheValuesType[];
 
   constructor(initialValues: cacheValuesType);
