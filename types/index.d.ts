@@ -41,7 +41,7 @@ export interface DynamicListProps<K extends BasicDataType> extends Omit<Variable
   };
   measurementContainerElement?: ComponentType<measurementContainerElementProps>;
   debug?: boolean;
-  ref: MutableRefObject<VariableSizeList | undefined>;
+  ref?: MutableRefObject<VariableSizeList | undefined>;
 }
 
 
