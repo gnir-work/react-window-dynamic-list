@@ -1,4 +1,9 @@
-import React, { useEffect, forwardRef, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  forwardRef,
+  useLayoutEffect,
+  useCallback
+} from "react";
 import { VariableSizeList } from "react-window";
 import debounce from "lodash.debounce";
 
@@ -70,7 +75,7 @@ const DynamicList = (
    * This could be a little tough in the site in the first seconds however it allows
    * fast jumping.
    */
-  const lazyCacheFill = () => {
+  const lazyCacheFill = useCallback(() => {
     if (!lazyMeasurement) {
       return;
     }
@@ -79,6 +84,7 @@ const DynamicList = (
       // We use set timeout here in order to execute the measuring in a background thread.
       setTimeout(() => {
         if (!cache.values[id]) {
+          console.log(`caching ${id}`);
           const height = measureIndex(index);
 
           // Double check in case the main thread already populated this id
@@ -88,7 +94,7 @@ const DynamicList = (
         }
       }, 0);
     });
-  };
+  }, [lazyMeasurement]);
 
   const handleListResize = debounce(() => {
     if (listRef.current) {
@@ -104,16 +110,25 @@ const DynamicList = (
   useEffect(() => {
     lazyCacheFill();
 
+    return destroyMeasureLayer;
+  }, []);
+
+  /**
+   * This component shares the listRef (ref to VariableSizeList) with its users - read useShareForwardRef.js for more
+   * info. This sharing comes at a cost - if users call VariableSizeList functions directly we cant adjust accordingly.
+   * In order to inject our custom code without effecting our API we added the overriding functionality as seen bellow:
+   * resetAfterIndex - Add the clearing of our cache as well as VariableSizeList cache.
+   */
+  useEffect(() => {
     if (listRef.current) {
       const oldResetAfterIndex = listRef.current.resetAfterIndex;
       listRef.current.resetAfterIndex = (index, shouldForceUpdate = true) => {
         cache.clearCache();
+        lazyCacheFill();
         oldResetAfterIndex(index, shouldForceUpdate);
       };
     }
-
-    return destroyMeasureLayer;
-  }, []);
+  }, [lazyCacheFill]);
 
   /**
    * Recalculate items size of the list size has changed.
