@@ -4,7 +4,7 @@ import DynamicList, { createCache } from "react-window-dynamic-list";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import { generateCommands, generateCommand } from "./utils";
-import { Input, InputNumber, Button } from "antd";
+import {Input, InputNumber, Button, Checkbox} from "antd";
 
 import "antd/dist/antd.compact.min.css";
 import "./App.css";
@@ -16,6 +16,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
   const [row, setRow] = useState(200);
   const [shouldShowList, setShouldShowList] = useState(true);
+  const [debugMode, setDebugMode] = useState(false);
   const dynamicListRef = useRef();
 
   const filteredCommands = commands.filter(command =>
@@ -48,7 +49,7 @@ const App = () => {
   return (
     <div>
       <header>
-        <h2>Dynamic list Example</h2>
+        <h2>Dynamic list Example </h2>
       </header>
       <content>
         <div className="filter-container">
@@ -78,6 +79,10 @@ const App = () => {
               Toggle list{" "}
             </Button>
           </div>
+          <div className="row">
+            <span>Debug mode enable: {" "}</span>
+            <Checkbox onChange={() => setDebugMode(!debugMode)} checked={debugMode} />
+          </div>
         </div>
         <div className="dynamic-list-container">
           <AutoSizer>
@@ -89,6 +94,7 @@ const App = () => {
                   data={filteredCommands}
                   width={width}
                   height={height}
+                  debug={debugMode}
                 >
                   {({ index, style }) => (
                     <div style={style}>
