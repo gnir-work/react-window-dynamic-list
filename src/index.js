@@ -50,7 +50,7 @@ const DynamicList = (
   const measureIndex = index => {
     const ItemContainer = (
       <div id="item-container" style={{ overflow: "auto" }}>
-        {children({ index, data:itemData[index] })}
+        {children({ index, data: itemData })}
       </div>
     );
 
